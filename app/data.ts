@@ -25,6 +25,7 @@ export type Race = {
   flag: string;
   date: string;
   completed: boolean;
+  cancelled?: boolean;
   sprint: boolean;
 };
 

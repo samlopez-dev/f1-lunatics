@@ -35,7 +35,7 @@ export default function Home() {
             />
             <p className="hidden sm:block text-white text-base tracking-[0.2em] uppercase">
               F1 Lunatics · 2026 Season
-          </p>
+            </p>
           </div>
           <div className="flex gap-4 sm:gap-6 text-right shrink-0">
             <div>
@@ -224,7 +224,7 @@ export default function Home() {
               <div
                 key={race.round}
                 className={`flex items-center gap-4 rounded-xl border px-5 py-4 transition-all ${
-                  race.completed
+                  race.completed || race.cancelled
                     ? "border-white/5 opacity-40"
                     : "border-white/10 hover:border-[#e10600]/30 bg-white/[0.02]"
                 }`}
@@ -232,8 +232,8 @@ export default function Home() {
                 <span className="text-3xl shrink-0">{race.flag}</span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="font-black uppercase tracking-wide text-sm">{race.name}</p>
-                    {race.sprint && (
+                    <p className={`font-black uppercase tracking-wide text-sm ${race.cancelled ? "line-through" : ""}`}>{race.name}</p>
+                    {race.sprint && !race.cancelled && (
                       <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#FF8000]/20 text-[#FF8000] font-black uppercase tracking-wider">Sprint</span>
                     )}
                   </div>
@@ -243,6 +243,8 @@ export default function Home() {
                   <p className="text-xs text-white/40">{formatDate(race.date)}</p>
                   {race.completed ? (
                     <span className="text-[10px] text-white/20 uppercase tracking-widest">Completed</span>
+                  ) : race.cancelled ? (
+                    <span className="text-[10px] text-red-500/60 font-black uppercase tracking-widest">Cancelled</span>
                   ) : (
                     <span className="text-[10px] text-[#e10600] font-black uppercase tracking-widest">Round {race.round}</span>
                   )}
