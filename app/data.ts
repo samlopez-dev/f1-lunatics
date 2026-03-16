@@ -114,9 +114,9 @@ export const RACES: Race[] = [
 
 // ── TEAM COLORS (for chart lines) ─────────────────────────────
 export const TEAM_COLORS: Record<string, string> = {
-  tigre:      "#dd3630",
-  archv:      "#01aa55",
-  cornwheel:  "#4141e9",
+  tigre:      "#e14e49",
+  archv:      "#4eba39",
+  cornwheel:  "#6060d5",
   proathlete: "#27F4D2",
   clubz:      "#FFD700",
   solarium:   "#FF87BC",

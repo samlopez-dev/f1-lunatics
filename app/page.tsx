@@ -33,12 +33,13 @@ export default function Home() {
             <img
               src="/f1-logo.png"
               alt="F1 Lunatics logo"
+              className="w-48 h-48 object-contain"
             />
             <div>
               <p className="text-[#e10600] text-[10px] font-black tracking-[0.4em] uppercase mb-2">
                 Fantasy League · 2026 Season
               </p>
-              <h1 className="text-6xl sm:text-7xl font-black uppercase tracking-tighter leading-none">
+              <h1 className="text-2xl sm:text-7xl font-black uppercase tracking-tighter leading-none">
                 F1 <span className="text-[#e10600]">Lunatics</span>
               </h1>
             </div>
