@@ -444,8 +444,7 @@ export default function Home() {
 
       {/* ── FOOTER ── */}
       <footer className={`border-t mt-12 py-6 text-center text-xs ${t.footerBorder} ${t.footerText}`}>
-        Site made by Sammy Lopez · F1 Lunatics · 2026 Fantasy League · Edit{" "}
-        <code className={`px-1 py-0.5 rounded ${t.codeBlock}`}>app/data.ts</code> after each race
+        Site made by Sammy Lopez · F1 Lunatics · 2026 Fantasy League
       </footer>
     </main>
   );
