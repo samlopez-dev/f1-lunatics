@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Sora } from "next/font/google";
 import "./globals.css";
 
-const geist = Geist({
+const sora = Sora({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-sora",
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${geist.variable} antialiased`} style={{ fontFamily: "var(--font-geist), sans-serif" }}>
+      <body className={`${sora.variable} antialiased`} style={{ fontFamily: "var(--font-sora), sans-serif" }}>
         {children}
       </body>
     </html>

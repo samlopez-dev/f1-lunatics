@@ -18,58 +18,62 @@ const MEDAL: Record<number, string> = {
   3: "#CD7F32",
 };
 
+// ── DARK THEME — balanced, accessible, not harsh ──────────────
 const D = {
-  main:        "bg-[#0f0f13] text-white",
-  header:      "border-white/10",
-  cardBorder:  "border-white/10",
-  cardBg:      "bg-white/[0.02]",
-  tableHead:   "bg-white/5 text-white/40",
-  tableRow:    "border-white/5 hover:bg-white/5",
-  textMuted:   "text-white/60",
-  textFaint:   "text-white/30",
-  textVfaint:  "text-white/20",
-  divider:     "divide-white/5",
-  footerBorder:"border-white/5",
-  footerText:  "text-white/20",
-  calCard:     "border-white/10 bg-white/[0.02]",
-  calDone:     "border-white/5 opacity-40",
-  tabInactive: "text-white/40 hover:text-white/70",
-  raceHeader:  "bg-white/5 border-white/10",
-  raceHover:   "hover:bg-white/5",
-  noteText:    "text-white/50",
-  noteStrong:  "text-white/70",
-  adjDash:     "text-white/20",
-  chartGrid:   "rgba(255,255,255,0.06)",
-  chartLabel:  "rgba(255,255,255,0.3)",
-  toggleBg:    "bg-white/10",
-  toggleIcon:  "opacity-40",
+  main:        "bg-[#0f0f13] text-[#e8e8e8]",
+  header:      "border-[#2a2a32]",
+  cardBorder:  "border-[#2a2a32]",
+  cardBg:      "bg-[#16161c]",
+  tableHead:   "bg-[#1a1a22] text-[#888896]",
+  tableRow:    "border-[#22222a] hover:bg-[#1c1c24]",
+  textPrimary: "text-[#e8e8e8]",
+  textMuted:   "text-[#a0a0b0]",
+  textFaint:   "text-[#72728a]",
+  textVfaint:  "text-[#52526a]",
+  divider:     "divide-[#22222a]",
+  footerBorder:"border-[#22222a]",
+  footerText:  "text-[#52526a]",
+  calCard:     "border-[#2a2a32] bg-[#16161c]",
+  calDone:     "border-[#22222a] opacity-40",
+  tabInactive: "text-[#72728a] hover:text-[#b0b0c0]",
+  raceHeader:  "bg-[#1a1a22] border-[#2a2a32]",
+  raceHover:   "hover:bg-[#1c1c24]",
+  noteText:    "text-[#a0a0b0]",
+  noteStrong:  "text-[#c8c8d8]",
+  adjDash:     "text-[#52526a]",
+  toggleBorder:"border-[#3a3a4a] text-[#a0a0b0] hover:text-[#e8e8e8] hover:border-[#5a5a6a]",
+  codeBlock:   "bg-[#1a1a22]",
+  positionFallbackBg: "#2a2a3a",
+  positionFallbackText: "#72728a",
 };
 
+// ── LIGHT THEME — balanced, accessible, not washed out ────────
 const L = {
-  main:        "bg-[#f0f0f0] text-[#111]",
-  header:      "border-black/10",
-  cardBorder:  "border-black/10",
-  cardBg:      "bg-black/[0.02]",
-  tableHead:   "bg-black/5 text-black/40",
-  tableRow:    "border-black/5 hover:bg-black/[0.04]",
-  textMuted:   "text-black/50",
-  textFaint:   "text-black/30",
-  textVfaint:  "text-black/20",
-  divider:     "divide-black/5",
-  footerBorder:"border-black/10",
-  footerText:  "text-black/30",
-  calCard:     "border-black/10 bg-white",
-  calDone:     "border-black/5 opacity-40",
-  tabInactive: "text-black/40 hover:text-black/70",
-  raceHeader:  "bg-black/5 border-black/10",
-  raceHover:   "hover:bg-black/[0.03]",
-  noteText:    "text-black/50",
-  noteStrong:  "text-black/70",
-  adjDash:     "text-black/20",
-  chartGrid:   "rgba(0,0,0,0.06)",
-  chartLabel:  "rgba(0,0,0,0.3)",
-  toggleBg:    "bg-black/10",
-  toggleIcon:  "opacity-30",
+  main:        "bg-[#f4f4f6] text-[#1a1a1a]",
+  header:      "border-[#dddde4]",
+  cardBorder:  "border-[#dddde4]",
+  cardBg:      "bg-white",
+  tableHead:   "bg-[#ececf0] text-[#666672]",
+  tableRow:    "border-[#e8e8ee] hover:bg-[#f0f0f4]",
+  textPrimary: "text-[#1a1a1a]",
+  textMuted:   "text-[#555560]",
+  textFaint:   "text-[#888896]",
+  textVfaint:  "text-[#aaaabc]",
+  divider:     "divide-[#e8e8ee]",
+  footerBorder:"border-[#dddde4]",
+  footerText:  "text-[#aaaabc]",
+  calCard:     "border-[#dddde4] bg-white",
+  calDone:     "border-[#e8e8ee] opacity-40",
+  tabInactive: "text-[#888896] hover:text-[#444450]",
+  raceHeader:  "bg-[#ececf0] border-[#dddde4]",
+  raceHover:   "hover:bg-[#f0f0f4]",
+  noteText:    "text-[#555560]",
+  noteStrong:  "text-[#2a2a2a]",
+  adjDash:     "text-[#aaaabc]",
+  toggleBorder:"border-[#ccccda] text-[#555560] hover:text-[#1a1a1a] hover:border-[#aaaabc]",
+  codeBlock:   "bg-[#ececf0]",
+  positionFallbackBg: "#e0e0e8",
+  positionFallbackText: "#888896",
 };
 
 export default function Home() {
@@ -101,28 +105,27 @@ export default function Home() {
               alt="F1 Lunatics"
               className="h-56 sm:h-56 object-contain shrink-0"
             />
-            <p className={`hidden sm:block text-base font-bold tracking-[0.2em] uppercase ${isDark ? "text-white" : "text-[#111]"}`}>
+            <p className={`hidden sm:block text-base font-bold tracking-[0.2em] uppercase ${t.textPrimary}`}>
               F1 Lunatics · 2026 Season
             </p>
           </div>
           <div className="flex items-center gap-4 sm:gap-6 text-right shrink-0">
             <div>
               <p className={`text-[9px] sm:text-[10px] uppercase tracking-widest ${t.textFaint}`}>Races Done</p>
-              <p className="text-xl sm:text-3xl font-black">{completedRaces.length}<span className={`text-sm sm:text-lg ${t.textVfaint}`}>/{RACES.length}</span></p>
+              <p className={`text-xl sm:text-3xl font-black ${t.textPrimary}`}>
+                {completedRaces.length}
+                <span className={`text-sm sm:text-lg ${t.textVfaint}`}>/{RACES.length}</span>
+              </p>
             </div>
             <div>
               <p className={`text-[9px] sm:text-[10px] uppercase tracking-widest ${t.textFaint}`}>Next Race</p>
-              <p className="text-sm sm:text-base font-bold leading-tight">{upcomingRaces[0]?.flag} {upcomingRaces[0]?.name.replace(" GP", "")}</p>
+              <p className={`text-sm sm:text-base font-bold leading-tight ${t.textPrimary}`}>{upcomingRaces[0]?.flag} {upcomingRaces[0]?.name.replace(" GP", "")}</p>
               <p className={`text-[10px] sm:text-xs ${t.textFaint}`}>{upcomingRaces[0] ? formatDate(upcomingRaces[0].date) : "—"}</p>
             </div>
             {/* Theme toggle */}
             <button
               onClick={toggleTheme}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all border ${
-                isDark
-                  ? "border-white/20 text-white/60 hover:text-white hover:border-white/40"
-                  : "border-black/20 text-black/50 hover:text-black hover:border-black/40"
-              }`}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all border ${t.toggleBorder}`}
             >
               {isDark ? (
                 <>
@@ -139,7 +142,7 @@ export default function Home() {
                   Dark
                 </>
               )}
-          </button>
+            </button>
           </div>
         </div>
 
@@ -191,8 +194,8 @@ export default function Home() {
                           <div
                             className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black"
                             style={{
-                              background: MEDAL[entry.position] ?? (isDark ? "#ffffff10" : "#00000010"),
-                              color: MEDAL[entry.position] ? "#000" : (isDark ? "#ffffff60" : "#00000060"),
+                              background: MEDAL[entry.position] ?? t.positionFallbackBg,
+                              color: MEDAL[entry.position] ? "#1a1a1a" : t.positionFallbackText,
                             }}
                           >
                             {entry.position}
@@ -202,7 +205,7 @@ export default function Home() {
                           <div className="flex items-center gap-3">
                             <div className="w-1 h-10 rounded-full shrink-0" style={{ background: color }} />
                             <div>
-                              <p className="font-black text-sm leading-tight">{entry.team.name}</p>
+                              <p className={`font-black text-sm leading-tight ${t.textPrimary}`}>{entry.team.name}</p>
                               <p className={`text-xs sm:hidden ${t.textFaint}`}>{entry.team.flag} {entry.team.manager}</p>
                             </div>
                           </div>
@@ -215,7 +218,7 @@ export default function Home() {
                         </td>
                         <td className="py-4 px-5 text-right hidden md:table-cell">
                           {entry.team.adjustmentPoints > 0 ? (
-                            <span className="text-xs px-2 py-1 rounded-full bg-amber-500/10 text-amber-400 font-bold">
+                            <span className="text-xs px-2 py-1 rounded-full bg-amber-500/10 text-amber-500 font-bold">
                               +{entry.team.adjustmentPoints}*
                             </span>
                           ) : (
@@ -236,8 +239,8 @@ export default function Home() {
             </div>
 
             {/* Footnote */}
-            <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm">
-              <p className="text-amber-400 font-bold text-xs uppercase tracking-widest mb-2">⚠️ Points Adjustment Note</p>
+            <div className={`rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm`}>
+              <p className="text-amber-500 font-bold text-xs uppercase tracking-widest mb-2">⚠️ Points Adjustment Note</p>
               <p className={`text-xs leading-relaxed ${t.noteText}`}>
                 <strong className={t.noteStrong}>Professional Athlete</strong> (+225 pts) and{" "}
                 <strong className={t.noteStrong}>corn wheel drive</strong> (+135 pts) had to create new Fantasy accounts
@@ -261,7 +264,7 @@ export default function Home() {
                       <span className="text-3xl">{race.flag}</span>
                       <div>
                         <div className="flex items-center gap-2">
-                          <p className="font-black uppercase tracking-wide">{race.name}</p>
+                          <p className={`font-black uppercase tracking-wide ${t.textPrimary}`}>{race.name}</p>
                           {race.sprint && (
                             <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#FF8000]/20 text-[#FF8000] font-black uppercase tracking-wider">Sprint</span>
                           )}
@@ -286,7 +289,7 @@ export default function Home() {
                             <span className={`text-xs font-black w-4 ${t.textFaint}`}>{idx + 1}</span>
                             <div className="w-1 h-6 rounded-full" style={{ background: color }} />
                             <div className="flex-1">
-                              <p className="font-bold text-sm">{entry.team.name}</p>
+                              <p className={`font-bold text-sm ${t.textPrimary}`}>{entry.team.name}</p>
                               <p className={`text-xs ${t.textFaint}`}>{entry.team.flag} {entry.team.manager}</p>
                             </div>
                             <span className="font-black text-lg" style={{ color }}>{pts > 0 ? `+${pts}` : "—"}</span>
@@ -317,15 +320,13 @@ export default function Home() {
               <div
                 key={race.round}
                 className={`flex items-center gap-4 rounded-xl border px-5 py-4 transition-all ${
-                  race.completed || race.cancelled
-                    ? t.calDone
-                    : t.calCard
+                  race.completed || race.cancelled ? t.calDone : t.calCard
                 }`}
               >
                 <span className="text-3xl shrink-0">{race.flag}</span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className={`font-black uppercase tracking-wide text-sm ${race.cancelled ? "line-through" : ""}`}>{race.name}</p>
+                    <p className={`font-black uppercase tracking-wide text-sm ${race.cancelled ? "line-through" : ""} ${t.textPrimary}`}>{race.name}</p>
                     {race.sprint && !race.cancelled && (
                       <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#FF8000]/20 text-[#FF8000] font-black uppercase tracking-wider">Sprint</span>
                     )}
@@ -340,7 +341,7 @@ export default function Home() {
                   {race.completed ? (
                     <span className={`text-[10px] uppercase tracking-widest ${t.textVfaint}`}>Completed</span>
                   ) : race.cancelled ? (
-                    <span className="text-[10px] text-red-500/60 font-black uppercase tracking-widest">Cancelled</span>
+                    <span className="text-[10px] text-red-400 font-black uppercase tracking-widest">Cancelled</span>
                   ) : (
                     <span className="text-[10px] text-[#e10600] font-black uppercase tracking-widest">Round {race.round}</span>
                   )}
@@ -354,7 +355,8 @@ export default function Home() {
 
       {/* ── FOOTER ── */}
       <footer className={`border-t mt-12 py-6 text-center text-xs ${t.footerBorder} ${t.footerText}`}>
-        Site made by Sammy Lopez · F1 Lunatics · 2026 Fantasy League · Edit <code className={`px-1 py-0.5 rounded ${isDark ? "bg-white/10" : "bg-black/10"}`}>app/data.ts</code> after each race
+        Site made by Sammy Lopez · F1 Lunatics · 2026 Fantasy League · Edit{" "}
+        <code className={`px-1 py-0.5 rounded ${t.codeBlock}`}>app/data.ts</code> after each race
       </footer>
     </main>
   );
@@ -379,8 +381,8 @@ function ProgressionChart({ isDark }: { isDark: boolean }) {
   const chartW = W - PAD.left - PAD.right;
   const chartH = H - PAD.top - PAD.bottom;
 
-  const gridColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
-  const labelColor = isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)";
+  const gridColor  = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
+  const labelColor = isDark ? "#72728a"                : "#888896";
 
   function xPos(i: number) {
     return PAD.left + (i / Math.max(completedCount - 1, 1)) * chartW;
@@ -389,7 +391,9 @@ function ProgressionChart({ isDark }: { isDark: boolean }) {
     return PAD.top + chartH - ((val - minVal) / range) * chartH;
   }
 
-  const raceLabels = completedRaces.map((r) => r.name.replace(" GP", "").replace("Australian", "AUS").replace("Chinese", "CHN"));
+  const raceLabels = completedRaces.map((r) =>
+    r.name.replace(" GP", "").replace("Australian", "AUS").replace("Chinese", "CHN")
+  );
 
   return (
     <div className="space-y-4">
@@ -433,7 +437,7 @@ function ProgressionChart({ isDark }: { isDark: boolean }) {
           return (
             <div key={team.id} className="flex items-center gap-2 text-xs">
               <div className="w-3 h-3 rounded-full" style={{ background: color }} />
-              <span className="opacity-60">{team.name}</span>
+              <span className={isDark ? "text-[#a0a0b0]" : "text-[#555560]"}>{team.name}</span>
             </div>
           );
         })}
