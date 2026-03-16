@@ -33,7 +33,6 @@ export default function Home() {
             <img
               src="/f1-logo.png"
               alt="F1 Lunatics logo"
-              className="w-14 h-14 rounded-xl object-cover"
             />
             <div>
               <p className="text-[#e10600] text-[10px] font-black tracking-[0.4em] uppercase mb-2">
