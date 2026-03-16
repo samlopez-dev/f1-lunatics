@@ -31,9 +31,9 @@ export default function Home() {
             <img
               src="/f1-logo.png"
               alt="F1 Lunatics"
-              className="h-36 sm:h-48 object-contain shrink-0"
+              className="h-48 sm:h-48 object-contain shrink-0"
             />
-            <p className="hidden sm:block text-white text-base tracking-[0.2em] uppercase">
+            <p className="hidden sm:block text-white text-base font-bold tracking-[0.2em] uppercase">
               F1 Lunatics · 2026 Season
             </p>
           </div>
