@@ -8,11 +8,8 @@ export type Team = {
   id: string;
   name: string;
   manager: string;
-  flag: string;
-  // Points earned per race in order (index 0 = Race 1, etc.)
-  // Add a new number after every race weekend!
+  country: string;
   racePoints: number[];
-  // Extra points added due to account transfer issues
   adjustmentPoints: number;
   adjustmentNote?: string;
 };
@@ -22,7 +19,6 @@ export type Race = {
   name: string;
   circuit: string;
   country: string;
-  flag: string;
   date: string;
   racetimePST: string;
   completed: boolean;
@@ -30,15 +26,12 @@ export type Race = {
   cancelled?: boolean;
 };
 
-// ── TEAMS ─────────────────────────────────────────────────────
-// racePoints: index 0 = Australian GP, index 1 = Chinese GP, etc.
-// After each race, add the new score to every team's array.
 export const TEAMS: Team[] = [
   {
     id: "tigre",
     name: "Scuderia Tigre",
     manager: "Sammy Lopez",
-    flag: "🇲🇽",
+    country: "Mexico",
     racePoints: [266, 265],
     adjustmentPoints: 0,
   },
@@ -46,7 +39,7 @@ export const TEAMS: Team[] = [
     id: "archv",
     name: "ARCHV RACING",
     manager: "Kai Resillas",
-    flag: "🇺🇸",
+    country: "USA",
     racePoints: [259, 259],
     adjustmentPoints: 0,
   },
@@ -54,7 +47,7 @@ export const TEAMS: Team[] = [
     id: "cornwheel",
     name: "corn wheel drive",
     manager: "Sam Giron",
-    flag: "🇺🇸",
+    country: "USA",
     racePoints: [224, 223],
     adjustmentPoints: 135,
     adjustmentNote: "Points from Race 1 lost due to account transfer",
@@ -63,7 +56,7 @@ export const TEAMS: Team[] = [
     id: "proathlete",
     name: "Professional Athlete",
     manager: "Dylan Nino",
-    flag: "🇨🇴",
+    country: "Colombia",
     racePoints: [183, 183],
     adjustmentPoints: 225,
     adjustmentNote: "Points from Race 1 lost due to account transfer",
@@ -72,7 +65,7 @@ export const TEAMS: Team[] = [
     id: "clubz",
     name: "CLUB Z",
     manager: "Daniel Resillas",
-    flag: "🇲🇽",
+    country: "Mexico",
     racePoints: [179, 179],
     adjustmentPoints: 0,
   },
@@ -80,13 +73,12 @@ export const TEAMS: Team[] = [
     id: "solarium",
     name: "Solarium's Squad",
     manager: "Ethan Giron",
-    flag: "🇺🇸",
+    country: "USA",
     racePoints: [165, 164],
     adjustmentPoints: 0,
   },
 ];
 
-// ── 2026 RACE CALENDAR ────────────────────────────────────────
 export const RACES: Race[] = [
   { round: 1,  name: "Australian GP",          circuit: "Albert Park Circuit",                country: "Australia",    flag: "🇦🇺", date: "2026-03-07", racetimePST: "8:00 PM",  completed: true,  sprint: false },
   { round: 2,  name: "Chinese GP",             circuit: "Shanghai International Circuit",     country: "China",        flag: "🇨🇳", date: "2026-03-15", racetimePST: "12:00 AM", completed: true,  sprint: true  },
@@ -114,17 +106,15 @@ export const RACES: Race[] = [
   { round: 24, name: "Abu Dhabi GP",           circuit: "Yas Marina Circuit",                 country: "UAE",          flag: "🇦🇪", date: "2026-12-06", racetimePST: "5:00 AM",  completed: false, sprint: false },
 ];
 
-// ── TEAM COLORS (for chart lines) ─────────────────────────────
 export const TEAM_COLORS: Record<string, string> = {
-  tigre:      "#e14e49",
-  archv:      "#4eba39",
-  cornwheel:  "#6060d5",
+  tigre:      "#e10600",
+  archv:      "#3671C6",
+  cornwheel:  "#FF8000",
   proathlete: "#27F4D2",
   clubz:      "#FFD700",
   solarium:   "#FF87BC",
 };
 
-// ── COMPUTED STANDINGS ─────────────────────────────────────────
 export type StandingEntry = {
   team: Team;
   totalPoints: number;
@@ -148,7 +138,6 @@ export function computeStandings(): StandingEntry[] {
   }));
 }
 
-// Cumulative points after each completed race (for progression chart)
 export function computeProgressionData() {
   const completedCount = RACES.filter((r) => r.completed).length;
   return TEAMS.map((team) => {

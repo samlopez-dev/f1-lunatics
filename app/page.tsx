@@ -12,6 +12,31 @@ const completedRaces = RACES.filter((r) => r.completed);
 const upcomingRaces = RACES.filter((r) => !r.completed && !r.cancelled);
 const leaderPoints = standings[0]?.totalPoints ?? 0;
 
+const COUNTRY_CODES: Record<string, string> = {
+  "Australia":    "au", "China":        "cn", "Japan":        "jp",
+  "Bahrain":      "bh", "Saudi Arabia": "sa", "USA":          "us",
+  "Canada":       "ca", "Monaco":       "mc", "Spain":        "es",
+  "Austria":      "at", "UK":           "gb", "Belgium":      "be",
+  "Hungary":      "hu", "Netherlands":  "nl", "Italy":        "it",
+  "Azerbaijan":   "az", "Singapore":    "sg", "Mexico":       "mx",
+  "Brazil":       "br", "Qatar":        "qa", "UAE":          "ae",
+  "Colombia":     "co",
+};
+
+function Flag({ country, size = 16 }: { country: string; size?: number }) {
+  const code = COUNTRY_CODES[country] ?? "un";
+  return (
+    <img
+      src={`/flags/${code}.svg`}
+      width={size}
+      height={Math.round(size * 0.75)}
+      alt={country}
+      className="inline-block rounded-[2px] shrink-0"
+      style={{ objectFit: "cover" }}
+    />
+  );
+}
+
 const MEDAL: Record<number, string> = {
   1: "#FFD700",
   2: "#C0C0C0",
@@ -113,7 +138,7 @@ export default function Home() {
               alt="F1 Lunatics"
               className="h-56 sm:h-56 object-contain shrink-0"
             />
-            <p className={`hidden sm:block text-base font-bold tracking-[0.1em] uppercase ${t.textPrimary}`}>
+            <p className={`hidden sm:block text-base font-bold tracking-[0.2em] uppercase ${t.textPrimary}`}>
               F1 Lunatics · 2026 Season
             </p>
           </div>
@@ -127,7 +152,10 @@ export default function Home() {
             </div>
             <div>
               <p className={`text-[9px] sm:text-[10px] uppercase tracking-widest ${t.textFaint}`}>Next Race</p>
-              <p className={`text-sm sm:text-base font-bold leading-tight ${t.textPrimary}`}>{upcomingRaces[0]?.flag} {upcomingRaces[0]?.name.replace(" GP", "")}</p>
+              <p className={`text-sm sm:text-base font-bold leading-tight ${t.textPrimary} flex items-center justify-end gap-1.5`}>
+                {upcomingRaces[0] && <Flag country={upcomingRaces[0].country} size={16} />}
+                {upcomingRaces[0]?.name.replace(" GP", "")}
+              </p>
               <p className={`text-[10px] sm:text-xs ${t.textFaint}`}>{upcomingRaces[0] ? formatDate(upcomingRaces[0].date) : "—"}</p>
             </div>
             {/* Theme toggle */}
@@ -267,12 +295,12 @@ export default function Home() {
                             <div className="w-1 h-10 rounded-full shrink-0" style={{ background: color }} />
                             <div>
                               <p className={`font-black text-sm leading-tight ${t.textPrimary}`}>{entry.team.name}</p>
-                              <p className={`text-xs sm:hidden ${t.textFaint}`}>{entry.team.flag} {entry.team.manager}</p>
+                              <p className={`text-xs sm:hidden ${t.textFaint}`}><Flag country={entry.team.country} size={12} /> {entry.team.manager}</p>
                             </div>
                           </div>
                         </td>
                         <td className="py-4 px-5 hidden sm:table-cell">
-                          <span className={`text-sm ${t.textMuted}`}>{entry.team.flag} {entry.team.manager}</span>
+                          <span className={`text-sm ${t.textMuted} flex items-center gap-1.5`}><Flag country={entry.team.country} size={14} /> {entry.team.manager}</span>
                         </td>
                         <td className={`py-4 px-5 text-right hidden md:table-cell ${t.textMuted}`}>
                           {entry.raceTotal}
@@ -322,7 +350,7 @@ export default function Home() {
                 <div key={race.round} className={`rounded-2xl border overflow-hidden ${t.cardBorder}`}>
                   <div className={`flex items-center justify-between px-5 py-4 border-b ${t.raceHeader}`}>
                     <div className="flex items-center gap-3">
-                      <span className="text-3xl">{race.flag}</span>
+                      <span className="text-3xl"><Flag country={race.country} size={32} /></span>
                       <div>
                         <div className="flex items-center gap-2">
                           <p className={`font-black uppercase tracking-wide ${t.textPrimary}`}>{race.name}</p>
@@ -351,7 +379,7 @@ export default function Home() {
                             <div className="w-1 h-6 rounded-full" style={{ background: color }} />
                             <div className="flex-1">
                               <p className={`font-bold text-sm ${t.textPrimary}`}>{entry.team.name}</p>
-                              <p className={`text-xs ${t.textFaint}`}>{entry.team.flag} {entry.team.manager}</p>
+                              <p className={`text-xs ${t.textFaint} flex items-center gap-1.5`}><Flag country={entry.team.country} size={12} /> {entry.team.manager}</p>
                             </div>
                             <span className="font-black text-lg" style={{ color }}>{pts > 0 ? `+${pts}` : "—"}</span>
                           </div>
@@ -384,7 +412,7 @@ export default function Home() {
                   race.completed || race.cancelled ? t.calDone : t.calCard
                 }`}
               >
-                <span className="text-3xl shrink-0">{race.flag}</span>
+                <span className="shrink-0"><Flag country={race.country} size={32} /></span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className={`font-black uppercase tracking-wide text-sm ${race.cancelled ? "line-through" : ""} ${t.textPrimary}`}>{race.name}</p>
