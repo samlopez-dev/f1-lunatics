@@ -27,22 +27,16 @@ export default function Home() {
 
       {/* ── HEADER ── */}
       <header className="relative border-b border-white/10 overflow-hidden">
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#e10600]" />
-        <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div className="flex items-center gap-4">
+      <div className="max-w-5xl mx-auto px-6 py-4 flex flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
             <img
               src="/f1-logo.png"
-              alt="F1 Lunatics logo"
-              className="w-48 h-48 object-contain"
+              alt="F1 Lunatics"
+              className="h-48 object-contain"
             />
-            <div>
-              <p className="text-[#e10600] text-[10px] font-black tracking-[0.4em] uppercase mb-2">
-                Fantasy League · 2026 Season
-              </p>
-              <h1 className="text-2xl sm:text-7xl font-black uppercase tracking-tighter leading-none">
-                F1 <span className="text-[#e10600]">Lunatics</span>
-              </h1>
-            </div>
+            <p className="text-white text-lg tracking-[0.3em] uppercase">
+              F1 Lunatics · 2026 Season
+            </p>
           </div>
           <div className="flex gap-6 text-right">
             <div>
