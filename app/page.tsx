@@ -14,9 +14,9 @@ const leaderPoints = standings[0]?.totalPoints ?? 0;
 
 // Position medal colors
 const MEDAL: Record<number, string> = {
-  1: "#ffbb00",
+  1: "#FFD700",
   2: "#C0C0C0",
-  3: "#b96f25",
+  3: "#CD7F32",
 };
 
 export default function Home() {
@@ -29,13 +29,20 @@ export default function Home() {
       <header className="relative border-b border-white/10 overflow-hidden">
         <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#e10600]" />
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <p className="text-[#e10600] text-[10px] font-black tracking-[0.4em] uppercase mb-2">
-              Fantasy League · 2026 Season
-            </p>
-            <h1 className="text-6xl sm:text-7xl font-black uppercase tracking-tighter leading-none">
-              F1 <span className="text-[#e10600]">Lunatics</span>
-            </h1>
+          <div className="flex items-center gap-4">
+            <img
+              src="/f1-logo.png"
+              alt="F1 Lunatics logo"
+              className="w-14 h-14 rounded-xl object-cover"
+            />
+            <div>
+              <p className="text-[#e10600] text-[10px] font-black tracking-[0.4em] uppercase mb-2">
+                Fantasy League · 2026 Season
+              </p>
+              <h1 className="text-6xl sm:text-7xl font-black uppercase tracking-tighter leading-none">
+                F1 <span className="text-[#e10600]">Lunatics</span>
+              </h1>
+            </div>
           </div>
           <div className="flex gap-6 text-right">
             <div>
@@ -256,7 +263,7 @@ export default function Home() {
 
       {/* ── FOOTER ── */}
       <footer className="border-t border-white/5 mt-12 py-6 text-center text-xs text-white/20">
-        Created by Sammy Lopez. F1 Lunatics · 2026 Fantasy League · Edit <code className="bg-white/10 px-1 py-0.5 rounded">app/data.ts</code> after each race
+        F1 Lunatics · 2026 Fantasy League · Edit <code className="bg-white/10 px-1 py-0.5 rounded">app/data.ts</code> after each race
       </footer>
     </main>
   );
