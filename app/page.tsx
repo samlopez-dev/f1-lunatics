@@ -38,9 +38,9 @@ function Flag({ country, size = 16 }: { country: string; size?: number }) {
 }
 
 const MEDAL: Record<number, string> = {
-  1: "#d97706", // amber — readable gold
-  2: "#6b7280", // medium gray — readable silver  
-  3: "#92400e", // brown — readable bronze
+  1: "#d97706",
+  2: "#6b7280",
+  3: "#92400e",
 };
 
 // ── DARK THEME — balanced, accessible, not harsh ──────────────
@@ -112,6 +112,7 @@ const L = {
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"standings" | "races" | "chart" | "calendar">("standings");
   const [isDark, setIsDark] = useState(true);
+  const [expandedRace, setExpandedRace] = useState<number | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("f1-theme");
@@ -405,38 +406,140 @@ export default function Home() {
         {/* ── CALENDAR ── */}
         {activeTab === "calendar" && (
           <div className="animate-in fade-in space-y-3">
-            {RACES.map((race) => (
-              <div
-                key={race.round}
-                className={`flex items-center gap-4 rounded-xl border px-5 py-4 transition-all ${
-                  race.completed || race.cancelled ? t.calDone : t.calCard
-                }`}
-              >
-                <span className="shrink-0"><Flag country={race.country} size={32} /></span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <p className={`font-black uppercase tracking-wide text-sm ${race.cancelled ? "line-through" : ""} ${t.textPrimary}`}>{race.name}</p>
-                    {race.sprint && !race.cancelled && (
-                      <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${t.sprintPill}`}>Sprint</span>
-                    )}
-                  </div>
-                  <p className={`text-xs truncate ${t.textFaint}`}>{race.circuit}</p>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className={`text-xs ${t.textFaint}`}>{formatDate(race.date)}</p>
-                  {!race.cancelled && !race.completed && (
-                    <p className={`text-[10px] ${t.textFaint}`}>{race.racetimePST} PST</p>
+            {RACES.map((race) => {
+              const isExpanded = expandedRace === race.round;
+              const isDisabled = race.completed || race.cancelled;
+              return (
+                <div key={race.round} className={`rounded-xl border overflow-hidden transition-all ${isDisabled ? t.calDone : t.calCard}`}>
+                  {/* Main row */}
+                  <button
+                    onClick={() => !isDisabled && setExpandedRace(isExpanded ? null : race.round)}
+                    className={`w-full flex items-center gap-4 px-5 py-4 text-left transition-all ${!isDisabled ? t.raceHover : ""}`}
+                    disabled={isDisabled}
+                  >
+                    <span className="shrink-0"><Flag country={race.country} size={32} /></span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className={`font-black uppercase tracking-wide text-sm ${race.cancelled ? "line-through" : ""} ${t.textPrimary}`}>{race.name}</p>
+                        {race.sprint && !race.cancelled && (
+                          <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${t.sprintPill}`}>Sprint</span>
+                        )}
+                      </div>
+                      <p className={`text-xs truncate ${t.textFaint}`}>{race.circuit}</p>
+                    </div>
+                    <div className="text-right shrink-0 flex items-center gap-3">
+                      <div>
+                        <p className={`text-xs ${t.textFaint}`}>{formatDate(race.date)}</p>
+                        {!race.cancelled && !race.completed && (
+                          <p className={`text-[10px] ${t.textFaint}`}>{race.racetimePST} PST</p>
+                        )}
+                        {race.completed ? (
+                          <span className={`text-[10px] uppercase tracking-widest ${t.textVfaint}`}>Completed</span>
+                        ) : race.cancelled ? (
+                          <span className={`text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest ${t.cancelledPill}`}>Cancelled</span>
+                        ) : (
+                          <span className="text-[10px] text-[#e10600] font-black uppercase tracking-widest">Round {race.round}</span>
+                        )}
+                      </div>
+                      {!isDisabled && (
+                        <svg
+                          width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                          className={`transition-transform shrink-0 ${t.textFaint} ${isExpanded ? "rotate-180" : ""}`}
+                        >
+                          <path d="m6 9 6 6 6-6"/>
+                        </svg>
+                      )}
+                    </div>
+                  </button>
+
+                  {/* Expanded details */}
+                  {isExpanded && (
+                    <div className={`border-t px-5 py-4 grid grid-cols-2 sm:grid-cols-3 gap-4 ${t.raceHeader}`}>
+
+                      {/* Laps */}
+                      <div className="flex items-start gap-2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`mt-0.5 shrink-0 ${t.textFaint}`}>
+                          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        <div>
+                          <p className={`text-[10px] uppercase tracking-widest ${t.textFaint}`}>Laps</p>
+                          <p className={`text-sm font-bold ${t.textPrimary}`}>{race.laps}</p>
+                        </div>
+                      </div>
+
+                      {/* Circuit length */}
+                      <div className="flex items-start gap-2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`mt-0.5 shrink-0 ${t.textFaint}`}>
+                          <path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/>
+                        </svg>
+                        <div>
+                          <p className={`text-[10px] uppercase tracking-widest ${t.textFaint}`}>Circuit Length</p>
+                          <p className={`text-sm font-bold ${t.textPrimary}`}>{race.circuitLengthKm} km</p>
+                        </div>
+                      </div>
+
+                      {/* Previous winner */}
+                      <div className="flex items-start gap-2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`mt-0.5 shrink-0 ${t.textFaint}`}>
+                          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                        </svg>
+                        <div>
+                          <p className={`text-[10px] uppercase tracking-widest ${t.textFaint}`}>2025 Winner</p>
+                          <p className={`text-sm font-bold ${t.textPrimary} flex items-center gap-1.5`}>
+                            <Flag country={race.previousWinnerCountry} size={12} />
+                            {race.previousWinner}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Lap record */}
+                      <div className="flex items-start gap-2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`mt-0.5 shrink-0 ${t.textFaint}`}>
+                          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+                        </svg>
+                        <div>
+                          <p className={`text-[10px] uppercase tracking-widest ${t.textFaint}`}>Lap Record</p>
+                          <p className={`text-sm font-bold ${t.textPrimary}`}>{race.lapRecordTime}</p>
+                          <p className={`text-[10px] ${t.textFaint}`}>{race.lapRecordHolder}</p>
+                        </div>
+                      </div>
+
+                      {/* Race time */}
+                      <div className="flex items-start gap-2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`mt-0.5 shrink-0 ${t.textFaint}`}>
+                          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        <div>
+                          <p className={`text-[10px] uppercase tracking-widest ${t.textFaint}`}>Race Start</p>
+                          <p className={`text-sm font-bold ${t.textPrimary}`}>{race.racetimePST} PST</p>
+                          <p className={`text-[10px] ${t.textFaint}`}>{formatDate(race.date)}</p>
+                        </div>
+                      </div>
+
+                      {/* Watch on Apple TV */}
+                      <div className="flex items-start gap-2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`mt-0.5 shrink-0 ${t.textFaint}`}>
+                          <rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/>
+                        </svg>
+                        <div>
+                          <p className={`text-[10px] uppercase tracking-widest ${t.textFaint}`}>Watch on</p>
+                          <div className="flex items-center gap-1.5 mt-0.5">
+                            {/* Apple TV+ logo */}
+                            <svg width="32" height="14" viewBox="0 0 60 26" fill="none">
+                              <text x="0" y="20" fontFamily="system-ui, -apple-system, sans-serif" fontSize="20" fontWeight="700" fill={isDark ? "#e8e8e8" : "#1a1a1a"}></text>
+                              <rect width="60" height="26" rx="5" fill={isDark ? "#1a1a22" : "#e8e8ee"}/>
+                              <text x="6" y="18" fontFamily="-apple-system, BlinkMacSystemFont, sans-serif" fontSize="11" fontWeight="700" fill={isDark ? "#e8e8e8" : "#1a1a1a"}>TV+</text>
+                            </svg>
+                            <span className={`text-sm font-bold ${t.textPrimary}`}>Apple TV+</span>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
                   )}
-                  {race.completed ? (
-                    <span className={`text-[10px] uppercase tracking-widest ${t.textVfaint}`}>Completed</span>
-                  ) : race.cancelled ? (
-                    <span className={`text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest ${t.cancelledPill}`}>Cancelled</span>
-                  ) : (
-                    <span className="text-[10px] text-[#e10600] font-black uppercase tracking-widest">Round {race.round}</span>
-                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
