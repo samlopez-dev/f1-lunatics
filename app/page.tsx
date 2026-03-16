@@ -516,22 +516,14 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* Watch on Apple TV */}
+                      {/* Watch on */}
                       <div className="flex items-start gap-2">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`mt-0.5 shrink-0 ${t.textFaint}`}>
                           <rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/>
                         </svg>
                         <div>
                           <p className={`text-[10px] uppercase tracking-widest ${t.textFaint}`}>Watch on</p>
-                          <div className="flex items-center gap-1.5 mt-0.5">
-                            {/* Apple TV+ logo */}
-                            <svg width="32" height="14" viewBox="0 0 60 26" fill="none">
-                              <text x="0" y="20" fontFamily="system-ui, -apple-system, sans-serif" fontSize="20" fontWeight="700" fill={isDark ? "#e8e8e8" : "#1a1a1a"}></text>
-                              <rect width="60" height="26" rx="5" fill={isDark ? "#1a1a22" : "#e8e8ee"}/>
-                              <text x="6" y="18" fontFamily="-apple-system, BlinkMacSystemFont, sans-serif" fontSize="11" fontWeight="700" fill={isDark ? "#e8e8e8" : "#1a1a1a"}>TV+</text>
-                            </svg>
-                            <span className={`text-sm font-bold ${t.textPrimary}`}>Apple TV+</span>
-                          </div>
+                          <p className={`text-sm font-bold ${t.textPrimary}`}>Apple TV+</p>
                         </div>
                       </div>
 
