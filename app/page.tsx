@@ -241,6 +241,9 @@ export default function Home() {
                 </div>
                 <div className="text-right shrink-0">
                   <p className="text-xs text-white/40">{formatDate(race.date)}</p>
+                  {!race.cancelled && !race.completed && (
+                    <p className="text-[10px] text-white/30">{race.racetimePST} PST</p>
+                  )}
                   {race.completed ? (
                     <span className="text-[10px] text-white/20 uppercase tracking-widest">Completed</span>
                   ) : race.cancelled ? (
