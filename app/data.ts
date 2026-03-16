@@ -53,7 +53,7 @@ export const TEAMS: Team[] = [
   {
     id: "cornwheel",
     name: "corn wheel drive",
-    manager: "Samantha Giron",
+    manager: "Sam Giron",
     country: "USA",
     racePoints: [0, 447],
     adjustmentPoints: 135,
