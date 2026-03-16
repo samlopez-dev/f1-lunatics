@@ -12,7 +12,6 @@ const completedRaces = RACES.filter((r) => r.completed);
 const upcomingRaces = RACES.filter((r) => !r.completed);
 const leaderPoints = standings[0]?.totalPoints ?? 0;
 
-// Position medal colors
 const MEDAL: Record<number, string> = {
   1: "#FFD700",
   2: "#C0C0C0",
@@ -27,26 +26,26 @@ export default function Home() {
 
       {/* ── HEADER ── */}
       <header className="relative border-b border-white/10 overflow-hidden">
-      <div className="max-w-5xl mx-auto px-6 py-4 flex flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
             <img
               src="/f1-logo.png"
               alt="F1 Lunatics"
-              className="h-48 object-contain"
+              className="h-36 sm:h-48 object-contain shrink-0"
             />
-            <p className="text-white text-lg tracking-[0.3em] uppercase">
+            <p className="hidden sm:block text-white text-base tracking-[0.2em] uppercase">
               F1 Lunatics · 2026 Season
-            </p>
+          </p>
           </div>
-          <div className="flex gap-6 text-right">
+          <div className="flex gap-4 sm:gap-6 text-right shrink-0">
             <div>
-              <p className="text-white/30 text-[10px] uppercase tracking-widest">Races Done</p>
-              <p className="text-3xl font-black">{completedRaces.length}<span className="text-white/20 text-lg">/{RACES.length}</span></p>
+              <p className="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-widest">Races Done</p>
+              <p className="text-xl sm:text-3xl font-black">{completedRaces.length}<span className="text-white/20 text-sm sm:text-lg">/{RACES.length}</span></p>
             </div>
             <div>
-              <p className="text-white/30 text-[10px] uppercase tracking-widest">Next Race</p>
-              <p className="text-base font-bold leading-tight">{upcomingRaces[0]?.flag} {upcomingRaces[0]?.name.replace(" GP", "")}</p>
-              <p className="text-white/30 text-xs">{upcomingRaces[0] ? formatDate(upcomingRaces[0].date) : "—"}</p>
+              <p className="text-white/30 text-[9px] sm:text-[10px] uppercase tracking-widest">Next Race</p>
+              <p className="text-sm sm:text-base font-bold leading-tight">{upcomingRaces[0]?.flag} {upcomingRaces[0]?.name.replace(" GP", "")}</p>
+              <p className="text-white/30 text-[10px] sm:text-xs">{upcomingRaces[0] ? formatDate(upcomingRaces[0].date) : "—"}</p>
             </div>
           </div>
         </div>
@@ -57,7 +56,7 @@ export default function Home() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2.5 text-xs font-bold uppercase tracking-widest transition-all rounded-t-lg ${
+              className={`px-3 sm:px-4 py-2.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all rounded-t-lg ${
                 activeTab === tab
                   ? "bg-[#e10600] text-white"
                   : "text-white/40 hover:text-white/70"
@@ -294,7 +293,6 @@ function ProgressionChart() {
   return (
     <div className="space-y-4">
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 320 }}>
-        {/* Grid lines */}
         {[0, 0.25, 0.5, 0.75, 1].map((frac) => {
           const y = PAD.top + chartH * (1 - frac);
           const val = Math.round(minVal + range * frac);
@@ -305,22 +303,11 @@ function ProgressionChart() {
             </g>
           );
         })}
-
-        {/* Race labels on x-axis */}
         {completedRaces.map((race, i) => (
-          <text
-            key={race.round}
-            x={xPos(i)}
-            y={H - PAD.bottom + 16}
-            textAnchor="middle"
-            fontSize={9}
-            fill="rgba(255,255,255,0.3)"
-          >
+          <text key={race.round} x={xPos(i)} y={H - PAD.bottom + 16} textAnchor="middle" fontSize={9} fill="rgba(255,255,255,0.3)">
             {raceLabels[i]}
           </text>
         ))}
-
-        {/* Lines per team */}
         {data.map(({ team, cumulative }) => {
           const color = TEAM_COLORS[team.id] ?? "#888";
           const points = cumulative.map((val, i) => `${xPos(i)},${yPos(val)}`).join(" ");
@@ -328,19 +315,10 @@ function ProgressionChart() {
           const lastY = yPos(cumulative[cumulative.length - 1] ?? 0);
           return (
             <g key={team.id}>
-              <polyline
-                points={points}
-                fill="none"
-                stroke={color}
-                strokeWidth={2.5}
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                opacity={0.9}
-              />
+              <polyline points={points} fill="none" stroke={color} strokeWidth={2.5} strokeLinejoin="round" strokeLinecap="round" opacity={0.9} />
               {cumulative.map((val, i) => (
                 <circle key={i} cx={xPos(i)} cy={yPos(val)} r={4} fill={color} />
               ))}
-              {/* Final label */}
               <text x={lastX + 6} y={lastY + 4} fontSize={8} fill={color} fontWeight="bold">
                 {cumulative[cumulative.length - 1]}
               </text>
@@ -348,8 +326,6 @@ function ProgressionChart() {
           );
         })}
       </svg>
-
-      {/* Legend */}
       <div className="flex flex-wrap gap-3 justify-center">
         {data.map(({ team }) => {
           const color = TEAM_COLORS[team.id] ?? "#888";
@@ -365,7 +341,6 @@ function ProgressionChart() {
   );
 }
 
-// ── HELPERS ──────────────────────────────────────────────────
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("en-US", {
     month: "short", day: "numeric", year: "numeric",
