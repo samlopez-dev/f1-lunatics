@@ -38,9 +38,9 @@ function Flag({ country, size = 16 }: { country: string; size?: number }) {
 }
 
 const MEDAL: Record<number, string> = {
-  1: "#FFD700",
-  2: "#C0C0C0",
-  3: "#CD7F32",
+  1: "#d97706", // amber — readable gold
+  2: "#6b7280", // medium gray — readable silver  
+  3: "#92400e", // brown — readable bronze
 };
 
 // ── DARK THEME — balanced, accessible, not harsh ──────────────
@@ -284,7 +284,7 @@ export default function Home() {
                             className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black"
                             style={{
                               background: MEDAL[entry.position] ?? t.positionFallbackBg,
-                              color: MEDAL[entry.position] ? "#1a1a1a" : t.positionFallbackText,
+                              color: MEDAL[entry.position] ? "#ffffff" : t.positionFallbackText,
                             }}
                           >
                             {entry.position}

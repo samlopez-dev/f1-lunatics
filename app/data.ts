@@ -116,15 +116,14 @@ export const RACES: Race[] = [
   { round: 24, name: "Abu Dhabi GP",           circuit: "Yas Marina Circuit",                 country: "UAE",          date: "2026-12-06", racetimePST: "5:00 AM",  completed: false, sprint: false },
 ];
 
-// ── TEAM COLORS ───────────────────────────────────────────────
 export const TEAM_COLORS: Record<string, string> = {
   tigre:      "#e10600",
-  archv:      "#3671C6",
-  cornwheel:  "#FF8000",
-  proathlete: "#27F4D2",
-  clubz:      "#FFD700",
-  davesf1221: "#a78bfa",
-  solarium:   "#FF87BC",
+  archv:      "#2563eb",
+  cornwheel:  "#c45e00",
+  proathlete: "#0d9488",
+  clubz:      "#b45309",
+  davesf1221: "#7c3aed",
+  solarium:   "#db2777",
 };
 
 // ── COMPUTED STANDINGS ────────────────────────────────────────
