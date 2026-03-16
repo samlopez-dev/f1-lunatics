@@ -115,9 +115,13 @@ export default function Home() {
   const [expandedRace, setExpandedRace] = useState<number | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem("f1-theme");
-    if (saved === "light") setIsDark(false);
-  }, []);
+  const saved = localStorage.getItem("f1-theme");
+  if (saved) {
+    setIsDark(saved === "dark");
+  } else {
+    setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches);
+  }
+}, []);
 
   function toggleTheme() {
     const next = !isDark;
