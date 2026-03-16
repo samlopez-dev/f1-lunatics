@@ -116,7 +116,7 @@ export const RACES: Race[] = [
 export const TEAM_COLORS: Record<string, string> = {
   tigre:      "#dd3630",
   archv:      "#01aa55",
-  cornwheel:  "#1a1aff",
+  cornwheel:  "#4141e9",
   proathlete: "#27F4D2",
   clubz:      "#FFD700",
   solarium:   "#FF87BC",
