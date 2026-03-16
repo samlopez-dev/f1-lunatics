@@ -256,7 +256,7 @@ export default function Home() {
 
       {/* ── FOOTER ── */}
       <footer className="border-t border-white/5 mt-12 py-6 text-center text-xs text-white/20">
-        F1 Lunatics · 2026 Fantasy League · Edit <code className="bg-white/10 px-1 py-0.5 rounded">app/data.ts</code> after each race
+        Site made by Sammy Lopez · F1 Lunatics · 2026 Fantasy League · Edit <code className="bg-white/10 px-1 py-0.5 rounded">app/data.ts</code> after each race
       </footer>
     </main>
   );
