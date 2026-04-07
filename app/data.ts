@@ -39,7 +39,7 @@ export const TEAMS: Team[] = [
     name: "Scuderia Tigre",
     manager: "Sammy Lopez",
     country: "Mexico",
-    racePoints: [219, 312, 94],
+    racePoints: [219, 312, 171],
     adjustmentPoints: 0,
   },
   {
@@ -47,7 +47,7 @@ export const TEAMS: Team[] = [
     name: "ARCHV RACING",
     manager: "Kai Resillas",
     country: "USA",
-    racePoints: [200, 318, 112],
+    racePoints: [200, 318, 182],
     adjustmentPoints: 0,
   },
   {
@@ -55,7 +55,7 @@ export const TEAMS: Team[] = [
     name: "corn wheel drive",
     manager: "Samantha Giron",
     country: "USA",
-    racePoints: [0, 447, 128],
+    racePoints: [0, 447, 201],
     adjustmentPoints: 135,
     adjustmentNote: "Race 1 points scored on old account (THE MEEPS)",
   },
@@ -64,7 +64,7 @@ export const TEAMS: Team[] = [
     name: "Professional Athlete",
     manager: "Dylan Nino",
     country: "Colombia",
-    racePoints: [0, 366, 95],
+    racePoints: [0, 366, 162],
     adjustmentPoints: 225,
     adjustmentNote: "Race 1 points lost due to account deletion",
   },
@@ -73,7 +73,7 @@ export const TEAMS: Team[] = [
     name: "CLUB Z",
     manager: "Daniel Resillas",
     country: "Mexico",
-    racePoints: [122, 236, 102],
+    racePoints: [122, 236, 174],
     adjustmentPoints: 0,
   },
   {
@@ -89,7 +89,7 @@ export const TEAMS: Team[] = [
     name: "Solarium's Squad",
     manager: "Ethan Giron",
     country: "USA",
-    racePoints: [60, 269, 91],
+    racePoints: [60, 269, 154],
     adjustmentPoints: 0,
   },
   {
@@ -97,7 +97,7 @@ export const TEAMS: Team[] = [
     name: "clowncargo",
     manager: "Lori Noyola",
     country: "USA",
-    racePoints: [0, 0, 142],
+    racePoints: [0, 0, 199],
     adjustmentPoints: 0,
   },
   {
