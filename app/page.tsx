@@ -20,7 +20,7 @@ const COUNTRY_CODES: Record<string, string> = {
   "Hungary":      "hu", "Netherlands":  "nl", "Italy":        "it",
   "Azerbaijan":   "az", "Singapore":    "sg", "Mexico":       "mx",
   "Brazil":       "br", "Qatar":        "qa", "UAE":          "ae",
-  "Colombia":     "co",
+  "Colombia":     "co", "Pirate": "pirate",
 };
 
 function Flag({ country, size = 16 }: { country: string; size?: number }) {

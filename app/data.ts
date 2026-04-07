@@ -88,7 +88,7 @@ export const TEAMS: Team[] = [
     id: "solarium",
     name: "Solarium's Squad",
     manager: "Ethan Giron",
-    country: "USA",
+    country: "Pirate",
     racePoints: [60, 269, 154],
     adjustmentPoints: 0,
   },
