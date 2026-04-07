@@ -62,7 +62,7 @@ export const TEAMS: Team[] = [
   {
     id: "proathlete",
     name: "Professional Athlete",
-    manager: "Dylan Nino",
+    manager: "Dylan Niño",
     country: "Colombia",
     racePoints: [0, 366, 162],
     adjustmentPoints: 225,
@@ -103,7 +103,7 @@ export const TEAMS: Team[] = [
   {
     id: "tbd",
     name: "TBD",
-    manager: "Chloe Pinon",
+    manager: "Chloë Piñon",
     country: "Italy",
     racePoints: [0, 0, 0],
     adjustmentPoints: 0,
