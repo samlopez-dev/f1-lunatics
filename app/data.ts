@@ -105,7 +105,7 @@ export const TEAMS: Team[] = [
     name: "TBD",
     manager: "Chloe Pinon",
     country: "USA",
-    racePoints: [0, 366, 95],
+    racePoints: [0, 0, 0],
     adjustmentPoints: 0,
   },
 ];
