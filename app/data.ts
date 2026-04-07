@@ -100,6 +100,14 @@ export const TEAMS: Team[] = [
     racePoints: [0, 0, 142],
     adjustmentPoints: 0,
   },
+  {
+    id: "tbd",
+    name: "TBD",
+    manager: "Chloe Pinon",
+    country: "USA",
+    racePoints: [0, 366, 95],
+    adjustmentPoints: 0,
+  },
 ];
 
 // ── 2026 RACE CALENDAR ────────────────────────────────────────
@@ -134,12 +142,12 @@ export const RACES: Race[] = [
 export const TEAM_COLORS: Record<string, string> = {
   tigre:      "#e10600",
   archv:      "#2563eb",
-  cornwheel:  "#c45e00",
+  cornwheel:  "#a5c7fe",
   proathlete: "#0d9488",
   clubz:      "#b45309",
   davesf1221: "#7c3aed",
   solarium:   "#db2777",
-  clowncargo: "#16a34a",
+  clowncargo: "#c67fff",
 };
 
 // ── COMPUTED STANDINGS ────────────────────────────────────────
