@@ -39,7 +39,7 @@ export const TEAMS: Team[] = [
     name: "Scuderia Tigre",
     manager: "Sammy Lopez",
     country: "Mexico",
-    racePoints: [219, 312, 171, 58],
+    racePoints: [219, 312, 171, 0, 0, 58],
     adjustmentPoints: 0,
   },
   {
@@ -47,7 +47,7 @@ export const TEAMS: Team[] = [
     name: "ARCHV RACING",
     manager: "Kai Resillas",
     country: "Mexico",
-    racePoints: [200, 318, 182, 80],
+    racePoints: [200, 318, 182, 0, 0, 80],
     adjustmentPoints: 0,
   },
   {
@@ -55,7 +55,7 @@ export const TEAMS: Team[] = [
     name: "corn wheel drive",
     manager: "Samantha Giron",
     country: "USA",
-    racePoints: [0, 447, 201, 154],
+    racePoints: [0, 447, 201, 0, 0, 154],
     adjustmentPoints: 135,
     adjustmentNote: "Race 1 points scored on old account (THE MEEPS)",
   },
@@ -64,7 +64,7 @@ export const TEAMS: Team[] = [
     name: "Professional Athlete",
     manager: "Dylan Niño",
     country: "Colombia",
-    racePoints: [0, 366, 162, 68],
+    racePoints: [0, 366, 162, 0, 0, 68],
     adjustmentPoints: 225,
     adjustmentNote: "Race 1 points lost due to account deletion",
   },
@@ -73,7 +73,7 @@ export const TEAMS: Team[] = [
     name: "CLUB Z",
     manager: "Daniel Resillas",
     country: "Mexico",
-    racePoints: [122, 236, 174, 74],
+    racePoints: [122, 236, 174, 0, 0, 74],
     adjustmentPoints: 0,
   },
   {
@@ -81,7 +81,7 @@ export const TEAMS: Team[] = [
     name: "DavesF1221",
     manager: "David Lopez",
     country: "USA",
-    racePoints: [97, 265, 196, 76],
+    racePoints: [97, 265, 196, 0, 0, 76],
     adjustmentPoints: 0,
   },
   {
@@ -89,7 +89,7 @@ export const TEAMS: Team[] = [
     name: "Solarium's Squad",
     manager: "Ethan Giron",
     country: "Pirate",
-    racePoints: [60, 269, 154, 88],
+    racePoints: [60, 269, 154, 0, 0, 88],
     adjustmentPoints: 0,
   },
   {
@@ -97,7 +97,7 @@ export const TEAMS: Team[] = [
     name: "clowncargo",
     manager: "Lori Noyola",
     country: "USA",
-    racePoints: [0, 0, 199, 105],
+    racePoints: [0, 0, 199, 0, 0, 105],
     adjustmentPoints: 0,
   },
   {
@@ -105,7 +105,7 @@ export const TEAMS: Team[] = [
     name: "chlotonelli",
     manager: "Chloë Piñon",
     country: "Italy",
-    racePoints: [0, 0, 0, 112],
+    racePoints: [0, 0, 0, 0, 0, 112],
     adjustmentPoints: 0,
   },
 ];
