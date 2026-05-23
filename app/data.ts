@@ -158,6 +158,7 @@ export type StandingEntry = {
   raceTotal: number;
   position: number;
   gap: number;
+  interval: number;
 };
 
 export function computeStandings(): StandingEntry[] {
@@ -172,6 +173,7 @@ export function computeStandings(): StandingEntry[] {
     ...e,
     position: i + 1,
     gap: leader - e.totalPoints,
+    interval: i === 0 ? 0 : (entries[i - 1].totalPoints - e.totalPoints),
   }));
 }
 

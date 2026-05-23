@@ -274,7 +274,13 @@ export default function Home() {
                     <th className="py-3 px-5 text-right hidden sm:table-cell">
                       <span className="flex items-center justify-end gap-1">
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                        Gap
+                        Interval
+                      </span>
+                    </th>
+                    <th className="py-3 px-5 text-right hidden sm:table-cell">
+                      <span className="flex items-center justify-end gap-1">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        Gap to Leader
                       </span>
                     </th>
                   </tr>
@@ -321,6 +327,9 @@ export default function Home() {
                         </td>
                         <td className="py-4 px-5 text-right">
                           <span className="text-xl font-black" style={{ color }}>{entry.totalPoints}</span>
+                        </td>
+                        <td className={`py-4 px-5 text-right hidden sm:table-cell text-sm ${t.textFaint}`}>
+                          {entry.interval === 0 ? <span className={`text-[10px] font-black px-2 py-1 rounded-full ${t.leaderPill}`}>LEADER</span> : `-${entry.interval}`}
                         </td>
                         <td className={`py-4 px-5 text-right hidden sm:table-cell text-sm ${t.textFaint}`}>
                           {entry.gap === 0 ? <span className={`text-[10px] font-black px-2 py-1 rounded-full ${t.leaderPill}`}>LEADER</span> : `-${entry.gap}`}
