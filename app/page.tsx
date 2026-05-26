@@ -329,10 +329,10 @@ export default function Home() {
                           <span className="text-xl font-black" style={{ color }}>{entry.totalPoints}</span>
                         </td>
                         <td className={`py-4 px-5 text-right hidden sm:table-cell text-sm ${t.textFaint}`}>
-                          {entry.interval === 0 ? <span className={`text-[10px] font-black px-2 py-1 rounded-full ${t.leaderPill}`}>LEADER</span> : `-${entry.interval}`}
+                          {entry.position === 1 ? <span className={`text-[10px] font-black px-2 py-1 rounded-full ${t.leaderPill}`}>LEADER</span> : `-${entry.interval}`}
                         </td>
                         <td className={`py-4 px-5 text-right hidden sm:table-cell text-sm ${t.textFaint}`}>
-                          {entry.gap === 0 ? <span className={`text-[10px] font-black px-2 py-1 rounded-full ${t.leaderPill}`}>LEADER</span> : `-${entry.gap}`}
+                          {entry.position === 1 ? <span className={`text-[10px] font-black px-2 py-1 rounded-full ${t.leaderPill}`}>LEADER</span> : `-${entry.gap}`}
                         </td>
                       </tr>
                     );
