@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Sora } from "next/font/google";
+import { Barlow } from "next/font/google";
 import "./globals.css";
 
-const sora = Sora({
+const barlow = Barlow({
   subsets: ["latin"],
-  variable: "--font-sora",
+  variable: "--font-barlow",
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${sora.variable} antialiased`} style={{ fontFamily: "var(--font-sora), sans-serif" }}>
+      <body className={`${barlow.variable} antialiased`} style={{ fontFamily: "var(--font-barlow), sans-serif" }}>
         {children}
       </body>
     </html>
