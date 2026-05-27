@@ -253,7 +253,7 @@ export default function Home() {
                         Manager
                       </span>
                     </th>
-                    <th className="py-3 px-5 text-right hidden md:table-cell">
+                    <th className="py-3 px-5 text-right hidden md:table-cell whitespace-nowrap">
                       <span className="flex items-center justify-end gap-1">
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
                         Race Pts
@@ -277,7 +277,7 @@ export default function Home() {
                         Interval
                       </span>
                     </th>
-                    <th className="py-3 px-5 text-right hidden sm:table-cell">
+                    <th className="py-3 px-5 text-right hidden sm:table-cell whitespace-nowrap">
                       <span className="flex items-center justify-end gap-1">
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                         Gap to Leader
