@@ -314,9 +314,8 @@ export default function Home() {
         </div>
 
         {/* Season progress bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-[3px]">
-          <div className="h-full bg-[#e10600] opacity-70 transition-all duration-700" style={{ width: `${(completedRaces.length / RACES.length) * 100}%` }} />
-        </div>
+        <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#e10600] opacity-20" />
+        <div className="absolute bottom-0 left-0 h-[3px] bg-[#e10600] opacity-75 transition-all duration-700" style={{ width: `${(completedRaces.length / RACES.length) * 100}%` }} />
 
         {/* Nav tabs */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex gap-1 mt-2 overflow-x-auto pb-px">
