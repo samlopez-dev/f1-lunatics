@@ -13,6 +13,32 @@ const upcomingRaces = RACES.filter((r) => !r.completed && !r.cancelled);
 const leaderPoints = standings[0]?.totalPoints ?? 0;
 const last3Races = completedRaces.slice(-3);
 
+// Position change since last race (positive = moved up)
+const prevStandingsMap: Record<string, number> = (() => {
+  if (completedRaces.length < 2) return {};
+  const lastIdx = completedRaces[completedRaces.length - 1].round - 1;
+  const prevTotals = standings
+    .map((e) => ({ id: e.team.id, pts: e.totalPoints - (e.team.racePoints[lastIdx] ?? 0) }))
+    .sort((a, b) => b.pts - a.pts);
+  const map: Record<string, number> = {};
+  prevTotals.forEach((e, i) => { map[e.id] = i + 1; });
+  return map;
+})();
+
+// Projected final standings based on avg pts/race × remaining races
+const projectedStandings = (() => {
+  if (completedRaces.length === 0) return [];
+  const remaining = upcomingRaces.length;
+  return standings
+    .map((e) => ({
+      team: e.team,
+      current: e.totalPoints,
+      projected: Math.round(e.totalPoints + (e.raceTotal / completedRaces.length) * remaining),
+      color: TEAM_COLORS[e.team.id] ?? "#888",
+    }))
+    .sort((a, b) => b.projected - a.projected);
+})();
+
 function getFormDots(teamId: string): Array<{ rank: number; raceName: string }> {
   return last3Races.map((race) => {
     const idx = race.round - 1;
@@ -174,7 +200,7 @@ const L = {
 };
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"standings" | "races" | "chart" | "calendar" | "heatmap">("standings");
+  const [activeTab, setActiveTab] = useState<"standings" | "races" | "chart" | "calendar" | "heatmap" | "changelog">("standings");
   const [isDark, setIsDark] = useState(true);
   const [expandedRace, setExpandedRace] = useState<number | null>(null);
   const [countdown, setCountdown] = useState<string>("");
@@ -287,9 +313,14 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Season progress bar */}
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] opacity-40">
+          <div className="h-full bg-[#e10600] transition-all duration-700" style={{ width: `${(completedRaces.length / RACES.length) * 100}%` }} />
+        </div>
+
         {/* Nav tabs */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex gap-1 mt-2 overflow-x-auto pb-px">
-          {(["standings", "races", "chart", "calendar", "heatmap"] as const).map((tab) => (
+          {(["standings", "races", "chart", "calendar", "heatmap", "changelog"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -322,11 +353,17 @@ export default function Home() {
                   <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
                 </svg>
               )}
-              {tab === "standings" ? "Standings" :
-               tab === "races"     ? "Results"   :
-               tab === "chart"     ? "Progress"  :
-               tab === "heatmap"   ? "Heat"      :
-                                     "Calendar"  }
+              {tab === "changelog" && (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                </svg>
+              )}
+              {tab === "standings"  ? "Standings" :
+               tab === "races"      ? "Results"   :
+               tab === "chart"      ? "Progress"  :
+               tab === "heatmap"    ? "Heat"      :
+               tab === "changelog"  ? "Log"       :
+                                      "Calendar"  }
             </button>
           ))}
         </div>
@@ -397,22 +434,35 @@ export default function Home() {
                     return (
                       <tr key={entry.team.id} className={`border-t transition-colors ${t.tableRow}`}>
                         <td className="py-3 px-3 sm:py-4 sm:px-5">
-                          <div
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black"
-                            style={{
-                              background: MEDAL[entry.position] ?? t.positionFallbackBg,
-                              color: MEDAL[entry.position] ? "#ffffff" : t.positionFallbackText,
-                            }}
-                          >
-                            {entry.position === 1 ? (
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
-                              </svg>
-                            ) : entry.position === 2 || entry.position === 3 ? (
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
-                              </svg>
-                            ) : entry.position}
+                          <div className="flex flex-col items-center gap-0.5">
+                            <div
+                              className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black"
+                              style={{
+                                background: MEDAL[entry.position] ?? t.positionFallbackBg,
+                                color: MEDAL[entry.position] ? "#ffffff" : t.positionFallbackText,
+                              }}
+                            >
+                              {entry.position === 1 ? (
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                                </svg>
+                              ) : entry.position === 2 || entry.position === 3 ? (
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                                </svg>
+                              ) : entry.position}
+                            </div>
+                            {(() => {
+                              const prev = prevStandingsMap[entry.team.id];
+                              if (!prev) return null;
+                              const change = prev - entry.position;
+                              if (change === 0) return <span className={`text-[8px] font-bold ${t.textVfaint}`}>—</span>;
+                              return (
+                                <span className="text-[8px] font-black" style={{ color: change > 0 ? "#22c55e" : "#ef4444" }}>
+                                  {change > 0 ? "▲" : "▼"}{Math.abs(change)}
+                                </span>
+                              );
+                            })()}
                           </div>
                         </td>
                         <td className="py-3 px-3 sm:py-4 sm:px-5">
@@ -429,14 +479,16 @@ export default function Home() {
                               </div>
                               {last3Races.length > 0 && (
                                 <div className="flex items-center gap-2 mt-1">
-                                  <div className="flex gap-1">
+                                  <div className="flex items-center gap-1">
                                     {getFormDots(entry.team.id).map(({ rank, raceName }, i) => (
-                                      <div
+                                      <span
                                         key={i}
-                                        className="w-2 h-2 rounded-full"
+                                        className="text-[9px] font-black"
                                         title={`${raceName}: P${rank}`}
-                                        style={{ background: formDotColor(rank) }}
-                                      />
+                                        style={{ color: formDotColor(rank) }}
+                                      >
+                                        P{rank}
+                                      </span>
                                     ))}
                                   </div>
                                   <MiniSparkline teamId={entry.team.id} color={color} />
@@ -481,6 +533,32 @@ export default function Home() {
                 </tbody>
               </table>
             </div>
+
+            {/* Projected final standings */}
+            {projectedStandings.length > 0 && upcomingRaces.length > 0 && (
+              <div className={`rounded-2xl border overflow-hidden ${t.cardBorder}`}>
+                <div className={`px-5 py-3 border-b flex items-center gap-2 flex-wrap ${t.raceHeader}`}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={t.textFaint}>
+                    <path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><path d="M22 2 12 12"/>
+                  </svg>
+                  <p className={`text-[10px] font-bold uppercase tracking-widest ${t.textFaint}`}>Projected Final Standings</p>
+                  <span className={`text-[9px] ${t.textVfaint}`}>· avg pts/race · {upcomingRaces.length} races left · just math, not fate</span>
+                </div>
+                <div className={`divide-y ${t.divider}`}>
+                  {projectedStandings.map((item, idx) => (
+                    <div key={item.team.id} className={`flex items-center gap-3 px-4 sm:px-5 py-2.5 transition-colors ${t.raceHover}`}>
+                      <span className={`text-xs font-black w-4 shrink-0 ${t.textVfaint}`}>{idx + 1}</span>
+                      <div className="w-1 h-5 rounded-full shrink-0" style={{ background: item.color }} />
+                      <p className={`flex-1 font-bold text-sm ${t.textPrimary}`}>{item.team.name}</p>
+                      <div className="text-right">
+                        <span className="font-black text-base sm:text-lg" style={{ color: item.color }}>{item.projected}</span>
+                        <span className={`text-[10px] ml-1.5 ${t.textVfaint}`}>{item.current} now</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Footnote */}
             <div className={`rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm`}>
@@ -696,6 +774,13 @@ export default function Home() {
           </div>
         )}
 
+        {/* ── CHANGELOG ── */}
+        {activeTab === "changelog" && (
+          <div className="animate-in fade-in">
+            <ChangelogView isDark={isDark} />
+          </div>
+        )}
+
       </div>
 
       {/* ── FOOTER ── */}
@@ -786,6 +871,105 @@ function ProgressionChart({ isDark }: { isDark: boolean }) {
           );
         })}
       </div>
+    </div>
+  );
+}
+
+// ── CHANGELOG ────────────────────────────────────────────────
+const CHANGELOG: Array<{
+  version: string;
+  date: string;
+  label: string;
+  entries: Array<{ type: "new" | "fix" | "tweak"; text: string }>;
+}> = [
+  {
+    version: "v0.3",
+    date: "May 2026",
+    label: "The Big Glow-Up",
+    entries: [
+      { type: "new",   text: "Live countdown timer to next race" },
+      { type: "new",   text: "Recent form indicators (P1 · P4 · P2 style) with color coding" },
+      { type: "new",   text: "Mini sparklines showing full-season trajectory" },
+      { type: "new",   text: "Race heatmap tab — teams × races grid, green to red by rank" },
+      { type: "new",   text: "Projected final standings based on avg pts/race" },
+      { type: "new",   text: "Position change arrows (▲▼) since last race" },
+      { type: "new",   text: "Season progress bar in header" },
+      { type: "new",   text: "Changelog tab (you are here)" },
+      { type: "tweak", text: "Timer polished to a subtle pill badge instead of harsh red" },
+      { type: "tweak", text: "Mobile layout pass — tighter padding, scrollable tabs, smaller round numbers" },
+      { type: "tweak", text: "Interval shown on mobile below manager name" },
+    ],
+  },
+  {
+    version: "v0.2",
+    date: "May 2026",
+    label: "Polish & Personality",
+    entries: [
+      { type: "new",   text: "Driver numbers for all 10 managers (#10, #11, #16…)" },
+      { type: "new",   text: "Philippines flag for Collin Pinto" },
+      { type: "new",   text: "Trophy icon for P1, medal icon for P2–P3" },
+      { type: "new",   text: "Barlow font throughout — cleaner, more athletic" },
+      { type: "tweak", text: "Team colors redesigned — distinct, WCAG AA accessible on both themes" },
+      { type: "tweak", text: "Font size bumped to 17px" },
+      { type: "fix",   text: "LEADER pill showing for tied teams — fixed to check position, not gap" },
+      { type: "fix",   text: "Dates showing one day early — JS UTC timezone bug fixed" },
+      { type: "fix",   text: "Race names and manager names wrapping on small screens" },
+      { type: "fix",   text: "2025 race winners corrected across all rounds" },
+    ],
+  },
+  {
+    version: "v0.1",
+    date: "Mar 2026",
+    label: "Season Launch",
+    entries: [
+      { type: "new", text: "Standings with gap to leader and interval columns" },
+      { type: "new", text: "Race results tab with per-round breakdowns" },
+      { type: "new", text: "Cumulative points progression chart" },
+      { type: "new", text: "Full 2026 calendar with circuit info, lap records, and times" },
+      { type: "new", text: "Dark / light theme with system preference detection" },
+      { type: "new", text: "Country flags for all managers and race locations" },
+      { type: "new", text: "Points adjustment note for Pro Athlete and Corn Wheel Drive" },
+    ],
+  },
+];
+
+function ChangelogView({ isDark }: { isDark: boolean }) {
+  const t = isDark ? D : L;
+  const typeStyles: Record<string, string> = {
+    new:   "bg-green-500/15 text-green-400 border border-green-500/30",
+    fix:   "bg-red-500/15 text-red-400 border border-red-500/30",
+    tweak: "bg-blue-500/15 text-blue-400 border border-blue-500/30",
+  };
+  const typeLabel: Record<string, string> = { new: "New", fix: "Fix", tweak: "Tweak" };
+
+  return (
+    <div className="space-y-6">
+      {CHANGELOG.map((release) => (
+        <div key={release.version} className={`rounded-2xl border overflow-hidden ${t.cardBorder}`}>
+          <div className={`px-5 py-4 border-b flex items-center justify-between gap-4 ${t.raceHeader}`}>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-[#e10600]/15 text-[#e10600] border border-[#e10600]/30">
+                  {release.version}
+                </span>
+                <p className={`font-black text-base ${t.textPrimary}`}>{release.label}</p>
+              </div>
+              <p className={`text-xs mt-0.5 ${t.textFaint}`}>{release.date}</p>
+            </div>
+            <span className={`text-xs ${t.textVfaint}`}>{release.entries.length} changes</span>
+          </div>
+          <ul className={`divide-y ${t.divider}`}>
+            {release.entries.map((entry, i) => (
+              <li key={i} className={`flex items-start gap-3 px-5 py-3 ${t.raceHover}`}>
+                <span className={`text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0 mt-0.5 ${typeStyles[entry.type]}`}>
+                  {typeLabel[entry.type]}
+                </span>
+                <p className={`text-sm ${t.textMuted}`}>{entry.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 }
