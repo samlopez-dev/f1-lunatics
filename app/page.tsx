@@ -11,6 +11,24 @@ const progressionData = computeProgressionData();
 const completedRaces = RACES.filter((r) => r.completed);
 const upcomingRaces = RACES.filter((r) => !r.completed && !r.cancelled);
 const leaderPoints = standings[0]?.totalPoints ?? 0;
+const last3Races = completedRaces.slice(-3);
+
+function getFormDots(teamId: string): Array<{ rank: number; raceName: string }> {
+  return last3Races.map((race) => {
+    const idx = race.round - 1;
+    const sorted = standings
+      .map((e) => ({ id: e.team.id, pts: e.team.racePoints[idx] ?? 0 }))
+      .sort((a, b) => b.pts - a.pts);
+    const rank = sorted.findIndex((s) => s.id === teamId) + 1;
+    return { rank, raceName: race.name.replace(" GP", "") };
+  });
+}
+
+function formDotColor(rank: number): string {
+  if (rank <= 3) return "#22c55e";
+  if (rank <= 7) return "#eab308";
+  return "#ef4444";
+}
 
 const COUNTRY_CODES: Record<string, string> = {
   "Australia":    "au", "China":        "cn", "Japan":        "jp",
@@ -113,15 +131,43 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<"standings" | "races" | "chart" | "calendar">("standings");
   const [isDark, setIsDark] = useState(true);
   const [expandedRace, setExpandedRace] = useState<number | null>(null);
+  const [countdown, setCountdown] = useState<string>("");
 
   useEffect(() => {
-  const saved = localStorage.getItem("f1-theme");
-  if (saved) {
-    setIsDark(saved === "dark");
-  } else {
-    setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches);
-  }
-}, []);
+    const saved = localStorage.getItem("f1-theme");
+    if (saved) {
+      setIsDark(saved === "dark");
+    } else {
+      setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches);
+    }
+  }, []);
+
+  useEffect(() => {
+    const next = upcomingRaces[0];
+    if (!next) return;
+    const [year, month, day] = next.date.split("-").map(Number);
+    const [timePart, ampm] = next.racetimePST.split(" ");
+    let [hours, minutes] = timePart.split(":").map(Number);
+    if (ampm === "PM" && hours !== 12) hours += 12;
+    if (ampm === "AM" && hours === 12) hours = 0;
+    // Mar–Nov = PDT (UTC-7), otherwise PST (UTC-8)
+    const utcOffset = month >= 3 && month <= 11 ? 7 : 8;
+    const raceTime = new Date(Date.UTC(year, month - 1, day, hours + utcOffset, minutes));
+
+    const tick = () => {
+      const diff = raceTime.getTime() - Date.now();
+      if (diff <= 0) { setCountdown("Underway!"); return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      setCountdown(`${d}d ${String(h).padStart(2, "0")}h ${String(m).padStart(2, "0")}m ${String(s).padStart(2, "0")}s`);
+    };
+
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   function toggleTheme() {
     const next = !isDark;
@@ -162,6 +208,7 @@ export default function Home() {
                 {upcomingRaces[0]?.name.replace(" GP", "")}
               </p>
               <p className={`text-[10px] sm:text-xs ${t.textFaint}`}>{upcomingRaces[0] ? formatDate(upcomingRaces[0].date) : "—"}</p>
+              {countdown && <p className="text-[10px] font-black text-[#e10600] tracking-wide tabular-nums">{countdown}</p>}
             </div>
             {/* Theme toggle */}
             <button
@@ -173,14 +220,14 @@ export default function Home() {
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                   </svg>
-                  Light
+                  <span className="hidden sm:inline">Light</span>
                 </>
               ) : (
                 <>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                   </svg>
-                  Dark
+                  <span className="hidden sm:inline">Dark</span>
                 </>
               )}
             </button>
@@ -188,7 +235,7 @@ export default function Home() {
         </div>
 
         {/* Nav tabs */}
-        <div className="max-w-5xl mx-auto px-6 flex gap-1 mt-2">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex gap-1 mt-2 overflow-x-auto pb-px">
           {(["standings", "races", "chart", "calendar"] as const).map((tab) => (
             <button
               key={tab}
@@ -235,13 +282,13 @@ export default function Home() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className={`${t.tableHead} text-[10px] uppercase tracking-widest`}>
-                    <th className="py-3 px-5 text-left w-14">
+                    <th className="py-2 px-3 sm:py-3 sm:px-5 text-left w-10 sm:w-14">
                       <span className="flex items-center gap-1">
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
                         Pos
                       </span>
                     </th>
-                    <th className="py-3 px-5 text-left">
+                    <th className="py-2 px-3 sm:py-3 sm:px-5 text-left">
                       <span className="flex items-center gap-1">
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
                         Team
@@ -265,7 +312,7 @@ export default function Home() {
                         Adj
                       </span>
                     </th>
-                    <th className="py-3 px-5 text-right">
+                    <th className="py-2 px-3 sm:py-3 sm:px-5 text-right">
                       <span className="flex items-center justify-end gap-1">
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
                         Total
@@ -290,7 +337,7 @@ export default function Home() {
                     const color = TEAM_COLORS[entry.team.id] ?? "#888";
                     return (
                       <tr key={entry.team.id} className={`border-t transition-colors ${t.tableRow}`}>
-                        <td className="py-4 px-5">
+                        <td className="py-3 px-3 sm:py-4 sm:px-5">
                           <div
                             className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black"
                             style={{
@@ -309,8 +356,8 @@ export default function Home() {
                             ) : entry.position}
                           </div>
                         </td>
-                        <td className="py-4 px-5">
-                          <div className="flex items-center gap-3">
+                        <td className="py-3 px-3 sm:py-4 sm:px-5">
+                          <div className="flex items-center gap-2 sm:gap-3">
                             <div className="w-1 h-10 rounded-full shrink-0" style={{ background: color }} />
                             <div>
                               <div className="flex items-center gap-2">
@@ -321,7 +368,24 @@ export default function Home() {
                                   </span>
                                 )}
                               </div>
-                              <p className={`text-xs sm:hidden ${t.textFaint}`}><Flag country={entry.team.country} size={12} /> {entry.team.manager}</p>
+                              {last3Races.length > 0 && (
+                                <div className="flex gap-1 mt-1">
+                                  {getFormDots(entry.team.id).map(({ rank, raceName }, i) => (
+                                    <div
+                                      key={i}
+                                      className="w-2 h-2 rounded-full"
+                                      title={`${raceName}: P${rank}`}
+                                      style={{ background: formDotColor(rank) }}
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                              <div className="flex items-center gap-2 sm:hidden mt-0.5">
+                                <p className={`text-xs ${t.textFaint}`}><Flag country={entry.team.country} size={12} /> {entry.team.manager}</p>
+                                {entry.position !== 1 && (
+                                  <span className={`text-[10px] font-bold ${t.textVfaint}`}>−{entry.interval} pts</span>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </td>
@@ -340,8 +404,8 @@ export default function Home() {
                             <span className={t.adjDash}>—</span>
                           )}
                         </td>
-                        <td className="py-4 px-5 text-right">
-                          <span className="text-xl font-black" style={{ color }}>{entry.totalPoints}</span>
+                        <td className="py-3 px-3 sm:py-4 sm:px-5 text-right">
+                          <span className="text-lg sm:text-xl font-black" style={{ color }}>{entry.totalPoints}</span>
                         </td>
                         <td className={`py-4 px-5 text-right hidden sm:table-cell text-sm ${t.textFaint}`}>
                           {entry.position === 1 ? <span className={`text-[10px] font-black px-2 py-1 rounded-full ${t.leaderPill}`}>LEADER</span> : `-${entry.interval}`}
@@ -378,21 +442,21 @@ export default function Home() {
               [...completedRaces].reverse().map((race) => (
                 <div key={race.round} className={`rounded-2xl border overflow-hidden ${t.cardBorder}`}>
                   <div className={`flex items-center justify-between px-5 py-4 border-b ${t.raceHeader}`}>
-                    <div className="flex items-center gap-3">
-                      <span className="text-3xl"><Flag country={race.country} size={32} /></span>
-                      <div>
-                        <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="shrink-0"><Flag country={race.country} size={32} /></span>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <p className={`font-black uppercase tracking-wide ${t.textPrimary}`}>{race.name}</p>
                           {race.sprint && (
                             <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${t.sprintPill}`}>Sprint</span>
                           )}
                         </div>
-                        <p className={`text-xs ${t.textFaint}`}>{race.circuit} · {formatDate(race.date)}</p>
+                        <p className={`text-xs truncate ${t.textFaint}`}>{race.circuit} · {formatDate(race.date)}</p>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right shrink-0">
                       <p className={`text-xs uppercase tracking-widest ${t.textVfaint}`}>Round</p>
-                      <p className={`text-3xl font-black ${t.textVfaint}`}>{race.round}</p>
+                      <p className={`text-xl sm:text-3xl font-black ${t.textVfaint}`}>{race.round}</p>
                     </div>
                   </div>
                   <div className={`divide-y ${t.divider}`}>
@@ -403,14 +467,14 @@ export default function Home() {
                         const pts = entry.team.racePoints[race.round - 1] ?? 0;
                         const color = TEAM_COLORS[entry.team.id] ?? "#888";
                         return (
-                          <div key={entry.team.id} className={`flex items-center gap-4 px-5 py-3 transition-colors ${t.raceHover}`}>
-                            <span className={`text-xs font-black w-4 ${t.textFaint}`}>{idx + 1}</span>
-                            <div className="w-1 h-6 rounded-full" style={{ background: color }} />
-                            <div className="flex-1">
-                              <p className={`font-bold text-sm ${t.textPrimary}`}>{entry.team.name}</p>
+                          <div key={entry.team.id} className={`flex items-center gap-3 px-4 sm:px-5 py-3 transition-colors ${t.raceHover}`}>
+                            <span className={`text-xs font-black w-4 shrink-0 ${t.textFaint}`}>{idx + 1}</span>
+                            <div className="w-1 h-6 rounded-full shrink-0" style={{ background: color }} />
+                            <div className="flex-1 min-w-0">
+                              <p className={`font-bold text-sm truncate ${t.textPrimary}`}>{entry.team.name}</p>
                               <p className={`text-xs ${t.textFaint} flex items-center gap-1.5`}><Flag country={entry.team.country} size={12} /> {entry.team.manager}</p>
                             </div>
-                            <span className="font-black text-lg" style={{ color }}>{pts > 0 ? `+${pts}` : "—"}</span>
+                            <span className="font-black text-base sm:text-lg shrink-0" style={{ color }}>{pts > 0 ? `+${pts}` : "—"}</span>
                           </div>
                         );
                       })}
