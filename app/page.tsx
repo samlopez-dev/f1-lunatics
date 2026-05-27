@@ -1015,7 +1015,16 @@ function HeatmapView({ isDark }: { isDark: boolean }) {
                   className={`py-2 px-1 text-center text-[9px] uppercase tracking-widest ${t.textFaint}`}
                   style={{ minWidth: 52 }}
                 >
-                  {race.name.replace(" GP", "").slice(0, 7)}
+                  {({
+                    "Australian GP": "AUS", "Chinese GP": "CHN", "Japanese GP": "JPN",
+                    "Bahrain GP": "BHR", "Saudi Arabian GP": "SAU", "Miami GP": "MIA",
+                    "Monaco GP": "MON", "Canadian GP": "CAN", "Spanish GP": "ESP",
+                    "Austrian GP": "AUT", "British GP": "GBR", "Belgian GP": "BEL",
+                    "Hungarian GP": "HUN", "Dutch GP": "NED", "Italian GP": "ITA",
+                    "Azerbaijan GP": "AZE", "Singapore GP": "SGP", "Mexican GP": "MEX",
+                    "Brazilian GP": "BRA", "Las Vegas GP": "LVG", "Qatar GP": "QAT",
+                    "Abu Dhabi GP": "ABU",
+                  } as Record<string, string>)[race.name] ?? race.name.replace(" GP", "").slice(0, 3).toUpperCase()}
                 </th>
               ))}
               <th className={`py-2 px-3 text-center text-[9px] uppercase tracking-widest ${t.textFaint}`} style={{ minWidth: 48 }}>Best</th>
