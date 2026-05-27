@@ -13,40 +13,6 @@ const upcomingRaces = RACES.filter((r) => !r.completed && !r.cancelled);
 const leaderPoints = standings[0]?.totalPoints ?? 0;
 const last3Races = completedRaces.slice(-3);
 
-const lastRace = completedRaces[completedRaces.length - 1] ?? null;
-
-// Highest single-race score ever recorded — used for elimination math
-const maxSingleRaceScore = completedRaces.length > 0
-  ? Math.max(...standings.flatMap((e) => completedRaces.map((r) => e.team.racePoints[r.round - 1] ?? 0)), 1)
-  : 1;
-
-// High stakes = P1→P3 gap is smaller than the best single race score (one race could flip it)
-const isHighStakes = completedRaces.length > 0 && standings.length >= 3 &&
-  (leaderPoints - (standings[2]?.totalPoints ?? 0)) < maxSingleRaceScore;
-
-// Last race recap data
-const lastRaceRecap = lastRace ? (() => {
-  const idx = lastRace.round - 1;
-  const scores = standings.map((e) => ({
-    team: e.team,
-    pts: e.team.racePoints[idx] ?? 0,
-    posChange: completedRaces.length >= 2 ? (prevStandingsMap[e.team.id] ?? e.position) - e.position : 0,
-    color: TEAM_COLORS[e.team.id] ?? "#888",
-  }));
-  const withPts = scores.filter((s) => s.pts > 0);
-  return {
-    race: lastRace,
-    top:   [...scores].sort((a, b) => b.pts - a.pts)[0],
-    mover: [...scores].sort((a, b) => b.posChange - a.posChange)[0],
-    worst: (withPts.length > 0 ? withPts : scores).sort((a, b) => a.pts - b.pts)[0],
-  };
-})() : null;
-
-function isEliminated(teamTotal: number): boolean {
-  if (upcomingRaces.length === 0 || completedRaces.length === 0) return false;
-  return teamTotal + maxSingleRaceScore * upcomingRaces.length < leaderPoints;
-}
-
 // Position change since last race (positive = moved up)
 const prevStandingsMap: Record<string, number> = (() => {
   if (completedRaces.length < 2) return {};
@@ -72,6 +38,40 @@ const projectedStandings = (() => {
     }))
     .sort((a, b) => b.projected - a.projected);
 })();
+
+const lastRace = completedRaces[completedRaces.length - 1] ?? null;
+
+// Highest single-race score ever recorded — used for elimination math
+const maxSingleRaceScore = completedRaces.length > 0
+  ? Math.max(...standings.flatMap((e) => completedRaces.map((r) => e.team.racePoints[r.round - 1] ?? 0)), 1)
+  : 1;
+
+// High stakes = P1→P3 gap is smaller than the best single race score (one race could flip it)
+const isHighStakes = completedRaces.length > 0 && standings.length >= 3 &&
+  (leaderPoints - (standings[2]?.totalPoints ?? 0)) < maxSingleRaceScore;
+
+// Last race recap — needs prevStandingsMap so must come after it
+const lastRaceRecap = lastRace ? (() => {
+  const idx = lastRace.round - 1;
+  const scores = standings.map((e) => ({
+    team: e.team,
+    pts: e.team.racePoints[idx] ?? 0,
+    posChange: completedRaces.length >= 2 ? (prevStandingsMap[e.team.id] ?? e.position) - e.position : 0,
+    color: TEAM_COLORS[e.team.id] ?? "#888",
+  }));
+  const withPts = scores.filter((s) => s.pts > 0);
+  return {
+    race: lastRace,
+    top:   [...scores].sort((a, b) => b.pts - a.pts)[0],
+    mover: [...scores].sort((a, b) => b.posChange - a.posChange)[0],
+    worst: (withPts.length > 0 ? withPts : scores).sort((a, b) => a.pts - b.pts)[0],
+  };
+})() : null;
+
+function isEliminated(teamTotal: number): boolean {
+  if (upcomingRaces.length === 0 || completedRaces.length === 0) return false;
+  return teamTotal + maxSingleRaceScore * upcomingRaces.length < leaderPoints;
+}
 
 function getFormDots(teamId: string): Array<{ rank: number; raceName: string }> {
   return last3Races.map((race) => {
