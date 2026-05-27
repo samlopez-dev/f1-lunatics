@@ -9,6 +9,7 @@ export type Team = {
   name: string;
   manager: string;
   country: string;
+  driverNumber?: number;
   racePoints: number[];
   adjustmentPoints: number;
   adjustmentNote?: string;
@@ -39,6 +40,7 @@ export const TEAMS: Team[] = [
     name: "Scuderia Tigre",
     manager: "Sammy Lopez",
     country: "Mexico",
+    driverNumber: 10,
     racePoints: [219, 312, 171, 0, 0, 137, 282],
     adjustmentPoints: 0,
   },
@@ -47,6 +49,7 @@ export const TEAMS: Team[] = [
     name: "ARCHV RACING",
     manager: "Kai Resillas",
     country: "Mexico",
+    driverNumber: 11,
     racePoints: [200, 318, 182, 0, 0, 203, 255],
     adjustmentPoints: 0,
   },
