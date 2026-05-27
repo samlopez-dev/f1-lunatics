@@ -114,7 +114,7 @@ export const TEAMS: Team[] = [
     name: "chlotonelli",
     manager: "Chloë Piñon",
     country: "Italy",
-    driverNumber: 27,
+    driverNumber: 12,
     racePoints: [0, 0, 0, 0, 0, 196, 275],
     adjustmentPoints: 0,
   },
