@@ -13,6 +13,40 @@ const upcomingRaces = RACES.filter((r) => !r.completed && !r.cancelled);
 const leaderPoints = standings[0]?.totalPoints ?? 0;
 const last3Races = completedRaces.slice(-3);
 
+const lastRace = completedRaces[completedRaces.length - 1] ?? null;
+
+// Highest single-race score ever recorded — used for elimination math
+const maxSingleRaceScore = completedRaces.length > 0
+  ? Math.max(...standings.flatMap((e) => completedRaces.map((r) => e.team.racePoints[r.round - 1] ?? 0)), 1)
+  : 1;
+
+// High stakes = P1→P3 gap is smaller than the best single race score (one race could flip it)
+const isHighStakes = completedRaces.length > 0 && standings.length >= 3 &&
+  (leaderPoints - (standings[2]?.totalPoints ?? 0)) < maxSingleRaceScore;
+
+// Last race recap data
+const lastRaceRecap = lastRace ? (() => {
+  const idx = lastRace.round - 1;
+  const scores = standings.map((e) => ({
+    team: e.team,
+    pts: e.team.racePoints[idx] ?? 0,
+    posChange: completedRaces.length >= 2 ? (prevStandingsMap[e.team.id] ?? e.position) - e.position : 0,
+    color: TEAM_COLORS[e.team.id] ?? "#888",
+  }));
+  const withPts = scores.filter((s) => s.pts > 0);
+  return {
+    race: lastRace,
+    top:   [...scores].sort((a, b) => b.pts - a.pts)[0],
+    mover: [...scores].sort((a, b) => b.posChange - a.posChange)[0],
+    worst: (withPts.length > 0 ? withPts : scores).sort((a, b) => a.pts - b.pts)[0],
+  };
+})() : null;
+
+function isEliminated(teamTotal: number): boolean {
+  if (upcomingRaces.length === 0 || completedRaces.length === 0) return false;
+  return teamTotal + maxSingleRaceScore * upcomingRaces.length < leaderPoints;
+}
+
 // Position change since last race (positive = moved up)
 const prevStandingsMap: Record<string, number> = (() => {
   if (completedRaces.length < 2) return {};
@@ -377,6 +411,7 @@ export default function Home() {
         {/* ── STANDINGS ── */}
         {activeTab === "standings" && (
           <div className="space-y-6 animate-in fade-in">
+            <LastRaceRecap isDark={isDark} />
             <div className={`rounded-2xl overflow-hidden border ${t.cardBorder}`}>
               <table className="w-full text-sm">
                 <thead>
@@ -472,11 +507,16 @@ export default function Home() {
                           <div className="flex items-center gap-2 sm:gap-3">
                             <div className="w-1 h-10 rounded-full shrink-0" style={{ background: color }} />
                             <div>
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 flex-wrap">
                                 <p className={`font-black text-sm leading-tight whitespace-nowrap ${t.textPrimary}`}>{entry.team.name}</p>
                                 {entry.team.driverNumber && (
                                   <span className="text-[10px] font-black tracking-widest px-1.5 py-0.5 rounded" style={{ color, border: `1px solid ${color}40`, background: `${color}12` }}>
                                     #{entry.team.driverNumber}
+                                  </span>
+                                )}
+                                {isEliminated(entry.totalPoints) && (
+                                  <span className="text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider border border-red-500/30 text-red-500/60">
+                                    Elim
                                   </span>
                                 )}
                               </div>
@@ -520,6 +560,13 @@ export default function Home() {
                         </td>
                         <td className="py-3 px-3 sm:py-4 sm:px-5 text-right">
                           <span className="text-lg sm:text-xl font-black" style={{ color }}>{entry.totalPoints}</span>
+                          {upcomingRaces.length > 0 && (
+                            <p className={`text-[9px] mt-0.5 ${t.textVfaint}`}>
+                              {entry.position === 1
+                                ? standings[1] ? `+${entry.totalPoints - standings[1].totalPoints} lead` : ""
+                                : `+${Math.ceil((leaderPoints - entry.totalPoints) / upcomingRaces.length)}/race`}
+                            </p>
+                          )}
                         </td>
                         <td className={`py-4 px-5 text-right hidden sm:table-cell text-sm ${t.textFaint}`}>
                           {entry.position === 1 ? <span className={`text-[10px] font-black px-2 py-1 rounded-full ${t.leaderPill}`}>LEADER</span> : `-${entry.interval}`}
@@ -655,6 +702,11 @@ export default function Home() {
                         <p className={`font-black uppercase tracking-wide text-sm ${race.cancelled ? "line-through" : ""} ${t.textPrimary}`}>{race.name}</p>
                         {race.sprint && !race.cancelled && (
                           <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${t.sprintPill}`}>Sprint</span>
+                        )}
+                        {isHighStakes && !race.completed && !race.cancelled && (
+                          <span className="text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border border-orange-500/40 text-orange-400">
+                            Key Race
+                          </span>
                         )}
                       </div>
                       <p className={`text-xs truncate ${t.textFaint}`}>{race.circuit}</p>
@@ -875,6 +927,75 @@ function ProgressionChart({ isDark }: { isDark: boolean }) {
   );
 }
 
+// ── LAST RACE RECAP ──────────────────────────────────────────
+function LastRaceRecap({ isDark }: { isDark: boolean }) {
+  if (!lastRaceRecap) return null;
+  const t = isDark ? D : L;
+  const { race, top, mover, worst } = lastRaceRecap;
+
+  const stats = [
+    {
+      label: "Top Score",
+      icon: (
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+        </svg>
+      ),
+      name: top.team.name,
+      value: `+${top.pts} pts`,
+      color: top.color,
+    },
+    {
+      label: "Biggest Mover",
+      icon: (
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m18 15-6-6-6 6"/>
+        </svg>
+      ),
+      name: mover.team.name,
+      value: mover.posChange > 0 ? `▲${mover.posChange} place${mover.posChange !== 1 ? "s" : ""}` : "Held position",
+      color: mover.posChange > 0 ? "#22c55e" : undefined,
+    },
+    {
+      label: "Rough Race",
+      icon: (
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m18 9-6 6-6-6"/>
+        </svg>
+      ),
+      name: worst.team.name,
+      value: `+${worst.pts} pts`,
+      color: worst.color,
+    },
+  ];
+
+  return (
+    <div className={`rounded-2xl border overflow-hidden ${t.cardBorder}`}>
+      <div className={`px-5 py-3 border-b flex items-center gap-2 ${t.raceHeader}`}>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={t.textFaint}>
+          <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/>
+        </svg>
+        <p className={`text-[10px] font-bold uppercase tracking-widest ${t.textFaint}`}>{race.name} Recap</p>
+        <span className={`text-[9px] ${t.textVfaint}`}>· {formatDate(race.date)}</span>
+      </div>
+      <div className={`grid grid-cols-3 divide-x ${t.divider}`}>
+        {stats.map((s) => (
+          <div key={s.label} className={`px-4 py-3 ${t.raceHover}`}>
+            <div className={`flex items-center gap-1 mb-1 ${t.textFaint}`}>
+              {s.icon}
+              <p className={`text-[9px] uppercase tracking-widest`}>{s.label}</p>
+            </div>
+            <p className="font-black text-xs leading-tight truncate" style={{ color: s.color }}>
+              {s.name}
+            </p>
+            <p className={`text-[10px] mt-0.5 ${t.textMuted}`}>{s.value}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── CHANGELOG ────────────────────────────────────────────────
 const CHANGELOG: Array<{
   version: string;
@@ -882,6 +1003,17 @@ const CHANGELOG: Array<{
   label: string;
   entries: Array<{ type: "new" | "fix" | "tweak"; text: string }>;
 }> = [
+  {
+    version: "v0.5",
+    date: "May 2026",
+    label: "Engagement Drop",
+    entries: [
+      { type: "new",   text: "Last race recap card — top scorer, biggest mover, and roughest race at a glance" },
+      { type: "new",   text: "Points needed to win — shows required pts/race average to catch the leader" },
+      { type: "new",   text: "Mathematically eliminated badge — appears when a team literally can't win anymore" },
+      { type: "new",   text: "Key Race badge on calendar — flags upcoming races where the standings could completely flip" },
+    ],
+  },
   {
     version: "v0.4",
     date: "May 2026",
