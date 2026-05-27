@@ -30,6 +30,52 @@ function formDotColor(rank: number): string {
   return "#ef4444";
 }
 
+function heatColor(rank: number): { bg: string; text: string } {
+  const scale = [
+    { bg: "#16a34a", text: "#fff" },
+    { bg: "#22c55e", text: "#fff" },
+    { bg: "#86efac", text: "#14532d" },
+    { bg: "#fde047", text: "#713f12" },
+    { bg: "#facc15", text: "#713f12" },
+    { bg: "#fb923c", text: "#fff" },
+    { bg: "#f97316", text: "#fff" },
+    { bg: "#ef4444", text: "#fff" },
+    { bg: "#dc2626", text: "#fff" },
+    { bg: "#991b1b", text: "#fca5a5" },
+  ];
+  return scale[rank - 1] ?? { bg: "#6b7280", text: "#fff" };
+}
+
+function MiniSparkline({ teamId, color }: { teamId: string; color: string }) {
+  const teamData = progressionData.find((d) => d.team.id === teamId);
+  if (!teamData || teamData.cumulative.length < 2) return null;
+  const vals = teamData.cumulative;
+  const min = Math.min(...vals);
+  const max = Math.max(...vals);
+  const range = max - min || 1;
+  const W = 44, H = 12;
+  const points = vals
+    .map((v, i) => {
+      const x = (i / (vals.length - 1)) * W;
+      const y = H - 2 - ((v - min) / range) * (H - 4);
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+  return (
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} className="shrink-0">
+      <polyline
+        points={points}
+        fill="none"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity="0.75"
+      />
+    </svg>
+  );
+}
+
 const COUNTRY_CODES: Record<string, string> = {
   "Australia":    "au", "China":        "cn", "Japan":        "jp",
   "Bahrain":      "bh", "Saudi Arabia": "sa", "USA":          "us",
@@ -128,7 +174,7 @@ const L = {
 };
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"standings" | "races" | "chart" | "calendar">("standings");
+  const [activeTab, setActiveTab] = useState<"standings" | "races" | "chart" | "calendar" | "heatmap">("standings");
   const [isDark, setIsDark] = useState(true);
   const [expandedRace, setExpandedRace] = useState<number | null>(null);
   const [countdown, setCountdown] = useState<string>("");
@@ -208,7 +254,14 @@ export default function Home() {
                 {upcomingRaces[0]?.name.replace(" GP", "")}
               </p>
               <p className={`text-[10px] sm:text-xs ${t.textFaint}`}>{upcomingRaces[0] ? formatDate(upcomingRaces[0].date) : "—"}</p>
-              {countdown && <p className="text-[10px] font-black text-[#e10600] tracking-wide tabular-nums">{countdown}</p>}
+              {countdown && (
+                <div className={`inline-flex items-center gap-1 mt-0.5 px-1.5 py-0.5 rounded-full border ${t.cardBorder} ${t.cardBg}`}>
+                  <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={t.textFaint}>
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  <span className={`text-[9px] font-black tabular-nums ${t.textPrimary}`}>{countdown}</span>
+                </div>
+              )}
             </div>
             {/* Theme toggle */}
             <button
@@ -236,7 +289,7 @@ export default function Home() {
 
         {/* Nav tabs */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex gap-1 mt-2 overflow-x-auto pb-px">
-          {(["standings", "races", "chart", "calendar"] as const).map((tab) => (
+          {(["standings", "races", "chart", "calendar", "heatmap"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -264,9 +317,15 @@ export default function Home() {
                   <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
                 </svg>
               )}
+              {tab === "heatmap" && (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+                </svg>
+              )}
               {tab === "standings" ? "Standings" :
                tab === "races"     ? "Results"   :
                tab === "chart"     ? "Progress"  :
+               tab === "heatmap"   ? "Heat"      :
                                      "Calendar"  }
             </button>
           ))}
@@ -369,15 +428,18 @@ export default function Home() {
                                 )}
                               </div>
                               {last3Races.length > 0 && (
-                                <div className="flex gap-1 mt-1">
-                                  {getFormDots(entry.team.id).map(({ rank, raceName }, i) => (
-                                    <div
-                                      key={i}
-                                      className="w-2 h-2 rounded-full"
-                                      title={`${raceName}: P${rank}`}
-                                      style={{ background: formDotColor(rank) }}
-                                    />
-                                  ))}
+                                <div className="flex items-center gap-2 mt-1">
+                                  <div className="flex gap-1">
+                                    {getFormDots(entry.team.id).map(({ rank, raceName }, i) => (
+                                      <div
+                                        key={i}
+                                        className="w-2 h-2 rounded-full"
+                                        title={`${raceName}: P${rank}`}
+                                        style={{ background: formDotColor(rank) }}
+                                      />
+                                    ))}
+                                  </div>
+                                  <MiniSparkline teamId={entry.team.id} color={color} />
                                 </div>
                               )}
                               <div className="flex items-center gap-2 sm:hidden mt-0.5">
@@ -627,6 +689,13 @@ export default function Home() {
           </div>
         )}
 
+        {/* ── HEATMAP ── */}
+        {activeTab === "heatmap" && (
+          <div className="animate-in fade-in">
+            <HeatmapView isDark={isDark} />
+          </div>
+        )}
+
       </div>
 
       {/* ── FOOTER ── */}
@@ -714,6 +783,112 @@ function ProgressionChart({ isDark }: { isDark: boolean }) {
               <div className="w-3 h-3 rounded-full" style={{ background: color }} />
               <span className={isDark ? "text-[#a0a0b0]" : "text-[#555560]"}>{team.name}</span>
             </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── HEATMAP ──────────────────────────────────────────────────
+function HeatmapView({ isDark }: { isDark: boolean }) {
+  const t = isDark ? D : L;
+  const bgStyle = isDark ? "#16161c" : "#ffffff";
+  const headBg  = isDark ? "#1a1a22" : "#ececf0";
+
+  if (completedRaces.length === 0) {
+    return <p className={`text-center py-10 ${t.textFaint}`}>No races completed yet.</p>;
+  }
+
+  const raceRankings = completedRaces.map((race) => {
+    const idx = race.round - 1;
+    const sorted = [...standings].sort(
+      (a, b) => (b.team.racePoints[idx] ?? 0) - (a.team.racePoints[idx] ?? 0)
+    );
+    const rankMap: Record<string, number> = {};
+    sorted.forEach((e, i) => { rankMap[e.team.id] = i + 1; });
+    return { race, rankMap };
+  });
+
+  return (
+    <div className={`rounded-2xl border overflow-hidden ${t.cardBorder}`}>
+      <div className="overflow-x-auto">
+        <table
+          className="text-xs border-collapse"
+          style={{ minWidth: `${completedRaces.length * 56 + 220}px` }}
+        >
+          <thead>
+            <tr style={{ background: headBg }}>
+              <th
+                className={`py-2 px-4 text-left text-[9px] uppercase tracking-widest sticky left-0 z-10 ${t.textFaint}`}
+                style={{ background: headBg, minWidth: 160 }}
+              >
+                Team
+              </th>
+              {completedRaces.map((race) => (
+                <th
+                  key={race.round}
+                  className={`py-2 px-1 text-center text-[9px] uppercase tracking-widest ${t.textFaint}`}
+                  style={{ minWidth: 52 }}
+                >
+                  {race.name.replace(" GP", "").slice(0, 7)}
+                </th>
+              ))}
+              <th className={`py-2 px-3 text-center text-[9px] uppercase tracking-widest ${t.textFaint}`} style={{ minWidth: 48 }}>Best</th>
+              <th className={`py-2 px-3 text-center text-[9px] uppercase tracking-widest ${t.textFaint}`} style={{ minWidth: 48 }}>Avg</th>
+            </tr>
+          </thead>
+          <tbody>
+            {standings.map((entry) => {
+              const color = TEAM_COLORS[entry.team.id] ?? "#888";
+              const racePts = completedRaces.map((r) => entry.team.racePoints[r.round - 1] ?? 0);
+              const best = Math.max(...racePts);
+              const avg = Math.round(racePts.reduce((a, b) => a + b, 0) / racePts.length);
+              return (
+                <tr key={entry.team.id} className={`border-t ${t.tableRow}`}>
+                  <td className="py-2 px-4 sticky left-0 z-10" style={{ background: bgStyle }}>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1 h-6 rounded-full shrink-0" style={{ background: color }} />
+                      <span className={`font-bold whitespace-nowrap ${t.textPrimary}`}>{entry.team.name}</span>
+                    </div>
+                  </td>
+                  {raceRankings.map(({ race, rankMap }) => {
+                    const pts = entry.team.racePoints[race.round - 1] ?? 0;
+                    const rank = rankMap[entry.team.id];
+                    const { bg, text } = heatColor(rank);
+                    return (
+                      <td key={race.round} className="py-1 px-1">
+                        <div
+                          className="rounded font-black text-[11px] text-center py-1.5 mx-0.5"
+                          style={{ background: bg, color: text, minWidth: 40 }}
+                          title={`${race.name}: ${pts} pts · P${rank}`}
+                        >
+                          {pts || "—"}
+                        </div>
+                      </td>
+                    );
+                  })}
+                  <td className="py-1 px-2 text-center">
+                    <span className={`font-black text-xs ${t.textPrimary}`}>{best}</span>
+                  </td>
+                  <td className="py-1 px-2 text-center">
+                    <span className={`text-xs ${t.textMuted}`}>{avg}</span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      {/* Legend */}
+      <div className={`px-4 py-3 border-t flex items-center gap-2 flex-wrap text-[9px] uppercase tracking-widest ${t.textVfaint}`} style={{ background: headBg }}>
+        <span className="font-bold mr-1">Key</span>
+        {([1,2,3,4,5,6,7,8,9,10] as const).map((r) => {
+          const { bg, text } = heatColor(r);
+          return (
+            <span key={r} className="px-1.5 py-0.5 rounded font-black" style={{ background: bg, color: text }}>
+              P{r}
+            </span>
           );
         })}
       </div>
