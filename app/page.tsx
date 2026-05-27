@@ -314,7 +314,7 @@ export default function Home() {
                             <div className="w-1 h-10 rounded-full shrink-0" style={{ background: color }} />
                             <div>
                               <div className="flex items-center gap-2">
-                                <p className={`font-black text-sm leading-tight ${t.textPrimary}`}>{entry.team.name}</p>
+                                <p className={`font-black text-sm leading-tight whitespace-nowrap ${t.textPrimary}`}>{entry.team.name}</p>
                                 {entry.team.driverNumber && (
                                   <span className="text-[10px] font-black tracking-widest px-1.5 py-0.5 rounded" style={{ color, border: `1px solid ${color}40`, background: `${color}12` }}>
                                     #{entry.team.driverNumber}
