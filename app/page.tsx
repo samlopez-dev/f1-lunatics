@@ -267,11 +267,18 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-4 sm:gap-6 text-right shrink-0">
             <div>
-              <p className={`text-[9px] sm:text-[10px] uppercase tracking-widest ${t.textFaint}`}>Races Done</p>
+              <p className={`text-[9px] sm:text-[10px] uppercase tracking-widest ${t.textFaint}`}>Season Progress</p>
               <p className={`text-xl sm:text-3xl font-black ${t.textPrimary}`}>
                 {completedRaces.length}
                 <span className={`text-sm sm:text-lg ${t.textVfaint}`}>/{RACES.length}</span>
               </p>
+              <div className={`w-16 sm:w-20 h-1.5 rounded-full mt-1 ${isDark ? "bg-[#2a2a3a]" : "bg-[#e0e0e8]"}`}>
+                <div
+                  className="h-full bg-[#e10600] rounded-full transition-all duration-700"
+                  style={{ width: `${(completedRaces.length / RACES.length) * 100}%` }}
+                />
+              </div>
+              <p className={`text-[8px] mt-0.5 ${t.textVfaint}`}>{Math.round((completedRaces.length / RACES.length) * 100)}% of season</p>
             </div>
             <div>
               <p className={`text-[9px] sm:text-[10px] uppercase tracking-widest ${t.textFaint}`}>Next Race</p>
@@ -313,9 +320,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Season progress bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#e10600] opacity-20" />
-        <div className="absolute bottom-0 left-0 h-[3px] bg-[#e10600] opacity-75 transition-all duration-700" style={{ width: `${(completedRaces.length / RACES.length) * 100}%` }} />
 
         {/* Nav tabs */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex gap-1 mt-2 overflow-x-auto pb-px">
