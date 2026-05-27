@@ -883,6 +883,17 @@ const CHANGELOG: Array<{
   entries: Array<{ type: "new" | "fix" | "tweak"; text: string }>;
 }> = [
   {
+    version: "v0.4",
+    date: "May 2026",
+    label: "Polish Pass",
+    entries: [
+      { type: "fix",   text: "Heatmap now fills full row width instead of leaving empty space on the right" },
+      { type: "fix",   text: "Heatmap column headers now use proper F1 3-letter codes (AUS, CHN, JPN…) instead of awkward word-cuts" },
+      { type: "tweak", text: "Season progress moved into the header stats as a labeled bar with track and percentage — way clearer than a floating line" },
+      { type: "tweak", text: "Removed mini sparklines — too small to be useful this early in the season" },
+    ],
+  },
+  {
     version: "v0.3",
     date: "May 2026",
     label: "The Big Glow-Up",
