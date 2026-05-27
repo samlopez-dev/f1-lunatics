@@ -318,7 +318,7 @@ export default function Home() {
                             </div>
                           </div>
                         </td>
-                        <td className="py-4 px-5 hidden sm:table-cell">
+                        <td className="py-4 px-5 hidden sm:table-cell whitespace-nowrap">
                           <span className={`text-sm ${t.textMuted} flex items-center gap-1.5`}><Flag country={entry.team.country} size={14} /> {entry.team.manager}</span>
                         </td>
                         <td className={`py-4 px-5 text-right hidden md:table-cell ${t.textMuted}`}>
