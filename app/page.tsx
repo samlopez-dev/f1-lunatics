@@ -314,8 +314,8 @@ export default function Home() {
         </div>
 
         {/* Season progress bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-[2px] opacity-40">
-          <div className="h-full bg-[#e10600] transition-all duration-700" style={{ width: `${(completedRaces.length / RACES.length) * 100}%` }} />
+        <div className="absolute bottom-0 left-0 right-0 h-[3px]">
+          <div className="h-full bg-[#e10600] opacity-70 transition-all duration-700" style={{ width: `${(completedRaces.length / RACES.length) * 100}%` }} />
         </div>
 
         {/* Nav tabs */}
@@ -998,7 +998,7 @@ function HeatmapView({ isDark }: { isDark: boolean }) {
     <div className={`rounded-2xl border overflow-hidden ${t.cardBorder}`}>
       <div className="overflow-x-auto">
         <table
-          className="text-xs border-collapse"
+          className="w-full text-xs border-collapse"
           style={{ minWidth: `${completedRaces.length * 56 + 220}px` }}
         >
           <thead>
