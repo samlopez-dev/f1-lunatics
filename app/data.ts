@@ -148,16 +148,16 @@ export const RACES: Race[] = [
 
 // ── TEAM COLORS ───────────────────────────────────────────────
 export const TEAM_COLORS: Record<string, string> = {
-  tigre:      "#d32f2f",
-  archv:      "#1e40af",
-  cornwheel:  "#1d4ed8",
-  proathlete: "#0d9488",
-  clubz:      "#92400e",
-  davesf1221: "#6d28d9",
-  solarium:   "#be185d",
-  clowncargo: "#a855f7",
-  chlotonelli: "#16a34a",
-  collinpinto: "#4f46e5",
+  tigre:       "#e10600", // red
+  archv:       "#937105", // amber/dark gold
+  cornwheel:   "#2563eb", // blue
+  proathlete:  "#0d9488", // teal
+  clubz:       "#57870e", // olive/dark lime
+  davesf1221:  "#b75410", // burnt orange
+  solarium:    "#ec4899", // hot pink
+  clowncargo:  "#7c3aed", // violet
+  chlotonelli: "#16a34a", // green
+  collinpinto: "#048196", // dark cyan
 };
 
 // ── COMPUTED STANDINGS ────────────────────────────────────────
