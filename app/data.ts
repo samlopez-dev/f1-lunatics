@@ -112,7 +112,7 @@ export const TEAMS: Team[] = [
     id: "collinpinto",
     name: "collinpinto",
     manager: "Collin Chung",
-    country: "USA",
+    country: "Philippines",
     racePoints: [0, 0, 0, 0, 0, 0, 5],
     adjustmentPoints: 0,
   },
