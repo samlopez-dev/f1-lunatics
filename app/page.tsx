@@ -563,8 +563,8 @@ export default function Home() {
                           {upcomingRaces.length > 0 && (
                             <p className={`text-[9px] mt-0.5 ${t.textVfaint}`}>
                               {entry.position === 1
-                                ? standings[1] ? `+${entry.totalPoints - standings[1].totalPoints} lead` : ""
-                                : `+${Math.ceil((leaderPoints - entry.totalPoints) / upcomingRaces.length)}/race`}
+                                ? standings[1] ? `+${entry.totalPoints - standings[1].totalPoints} ahead` : ""
+                                : `need +${Math.ceil((leaderPoints - entry.totalPoints) / upcomingRaces.length)}/race to win`}
                             </p>
                           )}
                         </td>
