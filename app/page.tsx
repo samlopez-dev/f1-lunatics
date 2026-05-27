@@ -478,20 +478,17 @@ export default function Home() {
                                 )}
                               </div>
                               {last3Races.length > 0 && (
-                                <div className="flex items-center gap-2 mt-1">
-                                  <div className="flex items-center gap-1">
-                                    {getFormDots(entry.team.id).map(({ rank, raceName }, i) => (
-                                      <span
-                                        key={i}
-                                        className="text-[9px] font-black"
-                                        title={`${raceName}: P${rank}`}
-                                        style={{ color: formDotColor(rank) }}
-                                      >
-                                        P{rank}
-                                      </span>
-                                    ))}
-                                  </div>
-                                  <MiniSparkline teamId={entry.team.id} color={color} />
+                                <div className="flex items-center gap-1 mt-1">
+                                  {getFormDots(entry.team.id).map(({ rank, raceName }, i) => (
+                                    <span
+                                      key={i}
+                                      className="text-[9px] font-black"
+                                      title={`${raceName}: P${rank}`}
+                                      style={{ color: formDotColor(rank) }}
+                                    >
+                                      P{rank}
+                                    </span>
+                                  ))}
                                 </div>
                               )}
                               <div className="flex items-center gap-2 sm:hidden mt-0.5">
