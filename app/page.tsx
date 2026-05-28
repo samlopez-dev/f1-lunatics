@@ -399,7 +399,7 @@ export default function Home() {
                tab === "races"      ? "Results"   :
                tab === "chart"      ? "Progress"  :
                tab === "heatmap"    ? "Heat"      :
-               tab === "changelog"  ? "Log"       :
+               tab === "changelog"  ? "Changelog"       :
                                       "Calendar"  }
             </button>
           ))}
