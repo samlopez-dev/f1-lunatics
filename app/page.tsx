@@ -845,31 +845,18 @@ export default function Home() {
 
 // ── PROGRESSION CHART ────────────────────────────────────────
 function ProgressionChart({ isDark }: { isDark: boolean }) {
-  const data = computeProgressionData();
-  const completedCount = completedRaces.length;
-  if (completedCount === 0) {
+  const [mode, setMode] = useState<"cumulative" | "perrace">("cumulative");
+  const [tooltip, setTooltip] = useState<{
+    teamName: string; raceCode: string; raceScore: number;
+    cumTotal: number | null; rank: number; color: string;
+    svgX: number; svgY: number;
+  } | null>(null);
+
+  const cumulativeData = computeProgressionData();
+  const n = completedRaces.length;
+
+  if (n === 0) {
     return <p className="text-center py-10 opacity-30">No races completed yet.</p>;
-  }
-
-  const allValues = data.flatMap((d) => d.cumulative);
-  const maxVal = Math.max(...allValues, 1);
-  const minVal = 0;
-  const range = maxVal - minVal;
-
-  const W = 600;
-  const H = 300;
-  const PAD = { top: 20, right: 20, bottom: 40, left: 50 };
-  const chartW = W - PAD.left - PAD.right;
-  const chartH = H - PAD.top - PAD.bottom;
-
-  const gridColor  = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
-  const labelColor = isDark ? "#72728a"                : "#888896";
-
-  function xPos(i: number) {
-    return PAD.left + (i / Math.max(completedCount - 1, 1)) * chartW;
-  }
-  function yPos(val: number) {
-    return PAD.top + chartH - ((val - minVal) / range) * chartH;
   }
 
   const RACE_CODE: Record<string, string> = {
@@ -882,46 +869,152 @@ function ProgressionChart({ isDark }: { isDark: boolean }) {
     "US GP": "USA", "Mexico City GP": "MEX", "São Paulo GP": "BRA",
     "Las Vegas GP": "LVG", "Qatar GP": "QAT", "Abu Dhabi GP": "ABU",
   };
-  const raceLabels = completedRaces.map((r) => RACE_CODE[r.name] ?? r.name.slice(0, 3).toUpperCase());
+
+  const TEAM_SHORT: Record<string, string> = {
+    tigre: "Tigre", archv: "ARCHV", cornwheel: "CWD",
+    proathlete: "ProAth", clubz: "ClubZ", davesf1221: "Daves",
+    solarium: "Solar", clowncargo: "Clown", chlotonelli: "Chloë", collinpinto: "Colin",
+  };
+
+  // Per-race rank maps for tooltips
+  const raceRankMaps = completedRaces.map((race) => {
+    const idx = race.round - 1;
+    const sorted = [...standings].sort((a, b) => (b.team.racePoints[idx] ?? 0) - (a.team.racePoints[idx] ?? 0));
+    const map: Record<string, number> = {};
+    sorted.forEach((e, i) => { map[e.team.id] = i + 1; });
+    return map;
+  });
+
+  const isPerRace = mode === "perrace";
+  const displayData = isPerRace
+    ? standings.map((e) => ({ team: e.team, values: completedRaces.map((r) => e.team.racePoints[r.round - 1] ?? 0) }))
+    : cumulativeData.map((d) => ({ team: d.team, values: d.cumulative }));
+
+  const maxVal = Math.max(...displayData.flatMap((d) => d.values), 1);
+
+  const W = 600, H = 300;
+  const PAD = { top: 20, right: 58, bottom: 40, left: 50 };
+  const chartW = W - PAD.left - PAD.right;
+  const chartH = H - PAD.top - PAD.bottom;
+
+  const gridColor  = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
+  const labelColor = isDark ? "#72728a" : "#888896";
+
+  function xPos(i: number) { return PAD.left + (n > 1 ? (i / (n - 1)) * chartW : chartW / 2); }
+  function yPos(v: number) { return PAD.top + chartH - (v / maxVal) * chartH; }
 
   return (
     <div className="space-y-4">
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxHeight: 320 }}>
-        {[0, 0.25, 0.5, 0.75, 1].map((frac) => {
-          const y = PAD.top + chartH * (1 - frac);
-          const val = Math.round(minVal + range * frac);
-          return (
-            <g key={frac}>
-              <line x1={PAD.left} x2={W - PAD.right} y1={y} y2={y} stroke={gridColor} strokeDasharray="4 4" />
-              <text x={PAD.left - 8} y={y + 4} textAnchor="end" fontSize={9} fill={labelColor}>{val}</text>
-            </g>
-          );
-        })}
-        {completedRaces.map((race, i) => (
-          <text key={race.round} x={xPos(i)} y={H - PAD.bottom + 16} textAnchor="middle" fontSize={9} fill={labelColor}>
-            {raceLabels[i]}
-          </text>
+      {/* Mode toggle */}
+      <div className="flex gap-2">
+        {(["cumulative", "perrace"] as const).map((m) => (
+          <button
+            key={m}
+            onClick={() => setMode(m)}
+            className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full border transition-all ${
+              mode === m
+                ? "bg-[#e10600] text-white border-[#e10600]"
+                : isDark
+                  ? "border-[#3a3a4a] text-[#a0a0b0] hover:text-white hover:border-[#5a5a6a]"
+                  : "border-[#ccccda] text-[#555560] hover:text-[#1a1a1a] hover:border-[#aaaabc]"
+            }`}
+          >
+            {m === "cumulative" ? "Cumulative" : "Per Race"}
+          </button>
         ))}
-        {data.map(({ team, cumulative }) => {
-          const color = TEAM_COLORS[team.id] ?? "#888";
-          const points = cumulative.map((val, i) => `${xPos(i)},${yPos(val)}`).join(" ");
-          const lastX = xPos(cumulative.length - 1);
-          const lastY = yPos(cumulative[cumulative.length - 1] ?? 0);
-          return (
-            <g key={team.id}>
-              <polyline points={points} fill="none" stroke={color} strokeWidth={2.5} strokeLinejoin="round" strokeLinecap="round" opacity={0.9} />
-              {cumulative.map((val, i) => (
-                <circle key={i} cx={xPos(i)} cy={yPos(val)} r={4} fill={color} />
-              ))}
-              <text x={lastX + 6} y={lastY + 4} fontSize={8} fill={color} fontWeight="bold">
-                {cumulative[cumulative.length - 1]}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
+      </div>
+
+      <div className="relative">
+        <svg
+          viewBox={`0 0 ${W} ${H}`}
+          className="w-full"
+          style={{ maxHeight: 320 }}
+          onMouseLeave={() => setTooltip(null)}
+        >
+          {/* Grid */}
+          {[0, 0.25, 0.5, 0.75, 1].map((frac) => {
+            const y = PAD.top + chartH * (1 - frac);
+            const val = Math.round(maxVal * frac);
+            return (
+              <g key={frac}>
+                <line x1={PAD.left} x2={W - PAD.right} y1={y} y2={y} stroke={gridColor} strokeDasharray="4 4" />
+                <text x={PAD.left - 8} y={y + 4} textAnchor="end" fontSize={9} fill={labelColor}>{val}</text>
+              </g>
+            );
+          })}
+          {/* X labels */}
+          {completedRaces.map((race, i) => (
+            <text key={race.round} x={xPos(i)} y={H - PAD.bottom + 16} textAnchor="middle" fontSize={9} fill={labelColor}>
+              {RACE_CODE[race.name] ?? race.name.slice(0, 3).toUpperCase()}
+            </text>
+          ))}
+          {/* Lines + dots + end labels */}
+          {displayData.map(({ team, values }) => {
+            const color = TEAM_COLORS[team.id] ?? "#888";
+            const polyPoints = values.map((v, i) => `${xPos(i)},${yPos(v)}`).join(" ");
+            const lastVal = values[values.length - 1] ?? 0;
+            return (
+              <g key={team.id}>
+                <polyline points={polyPoints} fill="none" stroke={color} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" opacity={0.85} />
+                {values.map((val, i) => (
+                  <circle
+                    key={i}
+                    cx={xPos(i)}
+                    cy={yPos(val)}
+                    r={4}
+                    fill={color}
+                    style={{ cursor: "pointer" }}
+                    onMouseEnter={() => {
+                      const raceScore = team.racePoints[completedRaces[i].round - 1] ?? 0;
+                      setTooltip({
+                        teamName: team.name,
+                        raceCode: RACE_CODE[completedRaces[i].name] ?? completedRaces[i].name,
+                        raceScore,
+                        cumTotal: isPerRace ? null : val,
+                        rank: raceRankMaps[i]?.[team.id] ?? 0,
+                        color,
+                        svgX: xPos(i),
+                        svgY: yPos(val),
+                      });
+                    }}
+                  />
+                ))}
+                {/* Team name at end of line */}
+                <text x={xPos(n - 1) + 7} y={yPos(lastVal) + 4} fontSize={8} fill={color} fontWeight="bold">
+                  {TEAM_SHORT[team.id] ?? team.name.slice(0, 5)}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+
+        {/* Hover tooltip */}
+        {tooltip && (
+          <div
+            className="absolute pointer-events-none z-10 px-2.5 py-1.5 rounded-lg text-[10px] shadow-lg border whitespace-nowrap"
+            style={{
+              left: `${(tooltip.svgX / W) * 100}%`,
+              top: `${(tooltip.svgY / H) * 100}%`,
+              transform: "translate(-50%, -140%)",
+              background: isDark ? "#1a1a22" : "#ffffff",
+              borderColor: isDark ? "#2a2a32" : "#dddde4",
+              color: isDark ? "#e8e8e8" : "#1a1a1a",
+            }}
+          >
+            <span className="font-black" style={{ color: tooltip.color }}>{tooltip.teamName}</span>
+            <span className="mx-1 opacity-40">·</span>
+            <span className="font-bold">{tooltip.raceCode}: {tooltip.raceScore > 0 ? `+${tooltip.raceScore}` : "—"} pts</span>
+            {tooltip.cumTotal !== null && (
+              <span className="ml-1 opacity-60">· {tooltip.cumTotal} total</span>
+            )}
+            <span className="ml-1 opacity-60">(P{tooltip.rank})</span>
+          </div>
+        )}
+      </div>
+
+      {/* Legend */}
       <div className="flex flex-wrap gap-3 justify-center">
-        {data.map(({ team }) => {
+        {displayData.map(({ team }) => {
           const color = TEAM_COLORS[team.id] ?? "#888";
           return (
             <div key={team.id} className="flex items-center gap-2 text-xs">
