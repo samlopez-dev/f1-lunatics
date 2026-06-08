@@ -872,9 +872,17 @@ function ProgressionChart({ isDark }: { isDark: boolean }) {
     return PAD.top + chartH - ((val - minVal) / range) * chartH;
   }
 
-  const raceLabels = completedRaces.map((r) =>
-    r.name.replace(" GP", "").replace("Australian", "AUS").replace("Chinese", "CHN")
-  );
+  const RACE_CODE: Record<string, string> = {
+    "Australian GP": "AUS", "Chinese GP": "CHN", "Japanese GP": "JPN",
+    "Bahrain GP": "BHR", "Saudi Arabian GP": "SAU", "Miami GP": "MIA",
+    "Monaco GP": "MON", "Canadian GP": "CAN", "Barcelona-Catalunya GP": "ESP",
+    "Austrian GP": "AUT", "British GP": "GBR", "Belgian GP": "BEL",
+    "Hungarian GP": "HUN", "Dutch GP": "NED", "Italian GP": "ITA",
+    "Madrid GP": "MAD", "Azerbaijan GP": "AZE", "Singapore GP": "SGP",
+    "US GP": "USA", "Mexico City GP": "MEX", "São Paulo GP": "BRA",
+    "Las Vegas GP": "LVG", "Qatar GP": "QAT", "Abu Dhabi GP": "ABU",
+  };
+  const raceLabels = completedRaces.map((r) => RACE_CODE[r.name] ?? r.name.slice(0, 3).toUpperCase());
 
   return (
     <div className="space-y-4">

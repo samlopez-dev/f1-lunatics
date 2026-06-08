@@ -198,12 +198,12 @@ export function computeStandings(): StandingEntry[] {
 }
 
 export function computeProgressionData() {
-  const completedCount = RACES.filter((r) => r.completed).length;
+  const completedRacesList = RACES.filter((r) => r.completed);
   return TEAMS.map((team) => {
     const cumulative: number[] = [];
     let running = team.adjustmentPoints;
-    for (let i = 0; i < completedCount; i++) {
-      running += team.racePoints[i] ?? 0;
+    for (const race of completedRacesList) {
+      running += team.racePoints[race.round - 1] ?? 0;
       cumulative.push(running);
     }
     return { team, cumulative };
