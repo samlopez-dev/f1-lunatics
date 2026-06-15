@@ -1113,6 +1113,19 @@ const CHANGELOG: Array<{
   entries: Array<{ type: "new" | "fix" | "tweak"; text: string }>;
 }> = [
   {
+    version: "v0.6",
+    date: "Jun 2026",
+    label: "Progress Glow-Up",
+    entries: [
+      { type: "new",   text: "Cumulative / Per Race toggle on the Progress chart — see the full season arc or individual race scores" },
+      { type: "new",   text: "Team name labels at end of each line on the chart — no more guessing which line is which" },
+      { type: "new",   text: "Hover tooltips on chart dots — team, race code, pts scored, and finishing position" },
+      { type: "new",   text: "Provisional Points banner — shows when results are still pending confirmation" },
+      { type: "fix",   text: "Progress chart was reading cancelled races (BHR, SAU) as completed data — caused wrong points for MIA, CAN, MON" },
+      { type: "fix",   text: "Chart race labels now use proper 3-letter codes for all rounds, not just AUS and CHN" },
+    ],
+  },
+  {
     version: "v0.5",
     date: "May 2026",
     label: "Engagement Drop",
