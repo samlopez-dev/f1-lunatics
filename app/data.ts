@@ -25,6 +25,7 @@ export type Race = {
   completed: boolean;
   sprint: boolean;
   cancelled?: boolean;
+  provisional?: boolean;
   laps: number;
   circuitLengthKm: number;
   previousWinner: string;
@@ -41,7 +42,7 @@ export const TEAMS: Team[] = [
     manager: "Sammy Lopez",
     country: "Mexico",
     driverNumber: 10,
-    racePoints: [219, 312, 171, 0, 0, 137, 282, 91],
+    racePoints: [219, 312, 171, 0, 0, 137, 282, 91, 159],
     adjustmentPoints: 0,
   },
   {
@@ -50,7 +51,7 @@ export const TEAMS: Team[] = [
     manager: "Kai Resillas",
     country: "Mexico",
     driverNumber: 11,
-    racePoints: [200, 318, 182, 0, 0, 203, 255, 255],
+    racePoints: [200, 318, 182, 0, 0, 203, 255, 255, 76],
     adjustmentPoints: 0,
   },
   {
@@ -59,7 +60,7 @@ export const TEAMS: Team[] = [
     manager: "Samantha Giron",
     country: "USA",
     driverNumber: 16,
-    racePoints: [0, 447, 201, 0, 0, 217, 247, 165],
+    racePoints: [0, 447, 201, 0, 0, 217, 247, 165, 97],
     adjustmentPoints: 135,
     adjustmentNote: "Race 1 points scored on old account (THE MEEPS)",
   },
@@ -69,7 +70,7 @@ export const TEAMS: Team[] = [
     manager: "Dylan Niño",
     country: "Colombia",
     driverNumber: 44,
-    racePoints: [0, 366, 162, 0, 0, 168, 119, 90],
+    racePoints: [0, 366, 162, 0, 0, 168, 119, 90, 65],
     adjustmentPoints: 225,
     adjustmentNote: "Race 1 points lost due to account deletion",
   },
@@ -79,7 +80,7 @@ export const TEAMS: Team[] = [
     manager: "Daniel Resillas",
     country: "Mexico",
     driverNumber: 63,
-    racePoints: [122, 236, 174, 0, 0, 181, 286, 212],
+    racePoints: [122, 236, 174, 0, 0, 181, 286, 212, 88],
     adjustmentPoints: 0,
   },
   {
@@ -88,7 +89,7 @@ export const TEAMS: Team[] = [
     manager: "David Lopez",
     country: "USA",
     driverNumber: 22,
-    racePoints: [97, 265, 196, 0, 0, 154, 137, 263],
+    racePoints: [97, 265, 196, 0, 0, 154, 137, 263, 79],
     adjustmentPoints: 0,
   },
   {
@@ -97,7 +98,7 @@ export const TEAMS: Team[] = [
     manager: "Ethan Giron",
     country: "Pirate",
     driverNumber: 67,
-    racePoints: [60, 269, 154, 0, 0, 164, 202, 110],
+    racePoints: [60, 269, 154, 0, 0, 164, 202, 110, 98],
     adjustmentPoints: 0,
   },
   {
@@ -106,7 +107,7 @@ export const TEAMS: Team[] = [
     manager: "Lori Noyola",
     country: "Mexico",
     driverNumber: 81,
-    racePoints: [0, 0, 199, 0, 0, 193, 295, 137],
+    racePoints: [0, 0, 199, 0, 0, 193, 295, 137, 90],
     adjustmentPoints: 0,
   },
   {
@@ -115,7 +116,7 @@ export const TEAMS: Team[] = [
     manager: "Chloë Piñon",
     country: "Italy",
     driverNumber: 12,
-    racePoints: [0, 0, 0, 0, 0, 196, 275, 169],
+    racePoints: [0, 0, 0, 0, 0, 196, 275, 169, 62],
     adjustmentPoints: 0,
   },
   {
@@ -124,7 +125,7 @@ export const TEAMS: Team[] = [
     manager: "Collin Chung",
     country: "Philippines",
     driverNumber: 14,
-    racePoints: [0, 0, 0, 0, 0, 0, 5, 119],
+    racePoints: [0, 0, 0, 0, 0, 0, 5, 119, 154],
     adjustmentPoints: 0,
   },
 ];
@@ -139,7 +140,7 @@ export const RACES: Race[] = [
   { round: 6,  name: "Miami GP",               circuit: "Miami International Autodrome",      country: "USA",          date: "2026-05-03", racetimePST: "1:00 PM",  completed: true,  sprint: true,  laps: 57, circuitLengthKm: 5.412, previousWinner: "Oscar Piastri",     previousWinnerCountry: "Australia",   lapRecordHolder: "Max Verstappen",   lapRecordTime: "1:29.708" },
   { round: 7,  name: "Canadian GP",            circuit: "Circuit Gilles Villeneuve",          country: "Canada",       date: "2026-05-24", racetimePST: "1:00 PM",  completed: true, sprint: true,  laps: 70, circuitLengthKm: 4.361, previousWinner: "George Russell",    previousWinnerCountry: "UK",          lapRecordHolder: "Valtteri Bottas",  lapRecordTime: "1:13.078" },
   { round: 8,  name: "Monaco GP",              circuit: "Circuit de Monaco",                  country: "Monaco",       date: "2026-06-07", racetimePST: "6:00 AM",  completed: true,  sprint: false, laps: 78, circuitLengthKm: 3.337, previousWinner: "Lando Norris",      previousWinnerCountry: "UK",          lapRecordHolder: "Lewis Hamilton",   lapRecordTime: "1:12.909" },
-  { round: 9,  name: "Barcelona-Catalunya GP", circuit: "Circuit de Barcelona-Catalunya",     country: "Spain",        date: "2026-06-14", racetimePST: "6:00 AM",  completed: false, sprint: false, laps: 66, circuitLengthKm: 4.657, previousWinner: "Oscar Piastri",     previousWinnerCountry: "Australia",   lapRecordHolder: "Max Verstappen",   lapRecordTime: "1:16.330" },
+  { round: 9,  name: "Barcelona-Catalunya GP", circuit: "Circuit de Barcelona-Catalunya",     country: "Spain",        date: "2026-06-14", racetimePST: "6:00 AM",  completed: true,  sprint: false, laps: 66, circuitLengthKm: 4.657, previousWinner: "Oscar Piastri",     previousWinnerCountry: "Australia",   lapRecordHolder: "Max Verstappen",   lapRecordTime: "1:16.330" },
   { round: 10, name: "Austrian GP",            circuit: "Red Bull Ring",                      country: "Austria",      date: "2026-06-28", racetimePST: "6:00 AM",  completed: false, sprint: false, laps: 71, circuitLengthKm: 4.318, previousWinner: "Lando Norris",      previousWinnerCountry: "UK",          lapRecordHolder: "Carlos Sainz",     lapRecordTime: "1:05.619" },
   { round: 11, name: "British GP",             circuit: "Silverstone Circuit",                country: "UK",           date: "2026-07-05", racetimePST: "7:00 AM",  completed: false, sprint: true,  laps: 52, circuitLengthKm: 5.891, previousWinner: "Lando Norris",      previousWinnerCountry: "UK",          lapRecordHolder: "Max Verstappen",   lapRecordTime: "1:27.097" },
   { round: 12, name: "Belgian GP",             circuit: "Circuit de Spa-Francorchamps",       country: "Belgium",      date: "2026-07-19", racetimePST: "6:00 AM",  completed: false, sprint: false, laps: 44, circuitLengthKm: 7.004, previousWinner: "Oscar Piastri",     previousWinnerCountry: "Australia",   lapRecordHolder: "Valtteri Bottas",  lapRecordTime: "1:46.286" },
