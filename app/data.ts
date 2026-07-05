@@ -89,7 +89,7 @@ export const TEAMS: Team[] = [
     manager: "David Lopez",
     country: "USA",
     driverNumber: 22,
-    racePoints: [97, 265, 196, 0, 0, 154, 137, 256, 79, 204],
+    racePoints: [97, 265, 196, 0, 0, 154, 137, 256, 79, 204, 235],
     adjustmentPoints: 0,
   },
   {
