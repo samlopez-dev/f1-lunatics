@@ -42,7 +42,7 @@ export const TEAMS: Team[] = [
     manager: "Sammy Lopez",
     country: "Mexico",
     driverNumber: 10,
-    racePoints: [219, 312, 171, 0, 0, 137, 282, 78, 159, 110, 251, 159, 188, 100, 196, 30, 176],
+    racePoints: [219, 312, 171, 0, 0, 137, 282, 78, 159, 110, 251, 159, 188, 100, 196, 30, 176, 211],
     adjustmentPoints: 0,
   },
   {
@@ -51,7 +51,7 @@ export const TEAMS: Team[] = [
     manager: "Kai Resillas",
     country: "Mexico",
     driverNumber: 11,
-    racePoints: [200, 318, 182, 0, 0, 203, 255, 262, 76, 219, 299, 187, 212, 228, 273, 199, 128],
+    racePoints: [200, 318, 182, 0, 0, 203, 255, 262, 76, 219, 299, 187, 212, 228, 273, 199, 128, 143],
     adjustmentPoints: 0,
   },
   {
@@ -60,7 +60,7 @@ export const TEAMS: Team[] = [
     manager: "Samantha Giron",
     country: "USA",
     driverNumber: 16,
-    racePoints: [0, 447, 201, 0, 0, 217, 247, 162, 97, 227, 323, 157, 225, 229, 270, 194, 163],
+    racePoints: [0, 447, 201, 0, 0, 217, 247, 162, 97, 227, 323, 157, 225, 229, 270, 194, 163, 207],
     adjustmentPoints: 135,
     adjustmentNote: "Race 1 points scored on old account (THE MEEPS)",
   },
@@ -70,7 +70,7 @@ export const TEAMS: Team[] = [
     manager: "Dylan Niño",
     country: "Colombia",
     driverNumber: 44,
-    racePoints: [0, 366, 162, 0, 0, 168, 119, 87, 65, 138, 261, 215, 159, 143, 234, 127, 171],
+    racePoints: [0, 366, 162, 0, 0, 168, 119, 87, 65, 138, 261, 215, 159, 143, 234, 127, 171, 206],
     adjustmentPoints: 225,
     adjustmentNote: "Race 1 points lost due to account deletion",
   },
@@ -80,7 +80,7 @@ export const TEAMS: Team[] = [
     manager: "Daniel Resillas",
     country: "Mexico",
     driverNumber: 63,
-    racePoints: [122, 236, 174, 0, 0, 181, 286, 212, 88, 226, 278, 190, 209, 123, 414, 205, 116],
+    racePoints: [122, 236, 174, 0, 0, 181, 286, 212, 88, 226, 278, 190, 209, 123, 414, 205, 116, 141],
     adjustmentPoints: 0,
   },
   {
@@ -89,7 +89,7 @@ export const TEAMS: Team[] = [
     manager: "David Lopez",
     country: "USA",
     driverNumber: 22,
-    racePoints: [97, 265, 196, 0, 0, 154, 137, 256, 79, 204, 235, 192, 198, 108, 329, 122, 220],
+    racePoints: [97, 265, 196, 0, 0, 154, 137, 256, 79, 204, 235, 192, 198, 108, 329, 122, 220, 193],
     adjustmentPoints: 0,
   },
   {
@@ -98,7 +98,7 @@ export const TEAMS: Team[] = [
     manager: "Ethan Giron",
     country: "Pirate",
     driverNumber: 67,
-    racePoints: [60, 269, 154, 0, 0, 164, 202, 120, 98, 159, 280, 157, 212, 409, 270, 199, 225],
+    racePoints: [60, 269, 154, 0, 0, 164, 202, 120, 98, 159, 280, 157, 212, 409, 270, 199, 225, 222],
     adjustmentPoints: 0,
   },
   {
@@ -107,7 +107,7 @@ export const TEAMS: Team[] = [
     manager: "Lori Noyola",
     country: "Mexico",
     driverNumber: 81,
-    racePoints: [0, 0, 199, 0, 0, 193, 295, 147, 90, 185, 272, 187, 216, 209, 414, 192, 142],
+    racePoints: [0, 0, 199, 0, 0, 193, 295, 147, 90, 185, 272, 187, 216, 209, 414, 192, 142, 278],
     adjustmentPoints: 0,
   },
   {
@@ -116,7 +116,7 @@ export const TEAMS: Team[] = [
     manager: "Chloë Piñon",
     country: "Italy",
     driverNumber: 12,
-    racePoints: [0, 0, 0, 0, 0, 196, 275, 182, 62, 217, 277, 190, 197, 206, 400, 192, 159],
+    racePoints: [0, 0, 0, 0, 0, 196, 275, 182, 62, 217, 277, 190, 197, 206, 400, 192, 159, 195],
     adjustmentPoints: 0,
   },
   {
@@ -125,7 +125,7 @@ export const TEAMS: Team[] = [
     manager: "Collin Chung",
     country: "Philippines",
     driverNumber: 14,
-    racePoints: [0, 0, 0, 0, 0, 0, 5, 110, 154, 221, 318, 59, 194, 153, 241, 147, 211],
+    racePoints: [0, 0, 0, 0, 0, 0, 5, 110, 154, 221, 318, 59, 194, 153, 241, 147, 211, 144],
     adjustmentPoints: 0,
   },
 ];
@@ -149,13 +149,14 @@ export const RACES: Race[] = [
   { round: 15, name: "Italian GP",             circuit: "Autodromo Nazionale Monza",          country: "Italy",        date: "2026-09-06", racetimePST: "6:00 AM",  completed: true, sprint: false, laps: 53, circuitLengthKm: 5.793, previousWinner: "Max Verstappen",    previousWinnerCountry: "Netherlands", lapRecordHolder: "Rubens Barrichello",lapRecordTime: "1:21.046" },
   { round: 16, name: "Madrid GP",              circuit: "Madring Street Circuit",             country: "Spain",        date: "2026-09-13", racetimePST: "6:00 AM",  completed: true, sprint: false, laps: 55, circuitLengthKm: 5.47,  previousWinner: "TBD",               previousWinnerCountry: "Spain",       lapRecordHolder: "TBD",              lapRecordTime: "TBD" },
   { round: 17, name: "Azerbaijan GP",          circuit: "Baku City Circuit",                  country: "Azerbaijan",   date: "2026-09-26", racetimePST: "4:00 AM",  completed: true, sprint: false, laps: 51, circuitLengthKm: 6.003, previousWinner: "Max Verstappen",    previousWinnerCountry: "Netherlands", lapRecordHolder: "Charles Leclerc",  lapRecordTime: "1:43.009" },
-  { round: 18, name: "Singapore GP",           circuit: "Marina Bay Street Circuit",          country: "Singapore",    date: "2026-10-11", racetimePST: "5:00 AM",  completed: false, sprint: true,  laps: 62, circuitLengthKm: 5.063, previousWinner: "George Russell",    previousWinnerCountry: "UK",          lapRecordHolder: "Lewis Hamilton",   lapRecordTime: "1:35.867" },
-  { round: 19, name: "US GP",                  circuit: "Circuit of the Americas",            country: "USA",          date: "2026-10-25", racetimePST: "1:00 PM",  completed: false, sprint: false, laps: 56, circuitLengthKm: 5.513, previousWinner: "Max Verstappen",    previousWinnerCountry: "Netherlands", lapRecordHolder: "Charles Leclerc",  lapRecordTime: "1:36.169" },
-  { round: 20, name: "Mexico City GP",         circuit: "Autodromo Hermanos Rodriguez",       country: "Mexico",       date: "2026-11-01", racetimePST: "12:00 PM", completed: false, sprint: false, laps: 71, circuitLengthKm: 4.304, previousWinner: "Lando Norris",      previousWinnerCountry: "UK",          lapRecordHolder: "Valtteri Bottas",  lapRecordTime: "1:17.774" },
-  { round: 21, name: "São Paulo GP",           circuit: "Autodromo Jose Carlos Pace",         country: "Brazil",       date: "2026-11-08", racetimePST: "9:00 AM",  completed: false, sprint: false, laps: 71, circuitLengthKm: 4.309, previousWinner: "Lando Norris",      previousWinnerCountry: "UK",          lapRecordHolder: "Valtteri Bottas",  lapRecordTime: "1:10.540" },
-  { round: 22, name: "Las Vegas GP",           circuit: "Las Vegas Strip Circuit",            country: "USA",          date: "2026-11-22", racetimePST: "8:00 PM",  completed: false, sprint: false, laps: 50, circuitLengthKm: 6.201, previousWinner: "Max Verstappen",    previousWinnerCountry: "Netherlands", lapRecordHolder: "Oscar Piastri",    lapRecordTime: "1:33.820" },
-  { round: 23, name: "Qatar GP",               circuit: "Lusail International Circuit",       country: "Qatar",        date: "2026-11-29", racetimePST: "8:00 AM",  completed: false, sprint: false, laps: 57, circuitLengthKm: 5.380, previousWinner: "Max Verstappen",    previousWinnerCountry: "Netherlands", lapRecordHolder: "Max Verstappen",   lapRecordTime: "1:24.319" },
-  { round: 24, name: "Abu Dhabi GP",           circuit: "Yas Marina Circuit",                 country: "UAE",          date: "2026-12-06", racetimePST: "5:00 AM",  completed: false, sprint: false, laps: 58, circuitLengthKm: 5.281, previousWinner: "Max Verstappen",    previousWinnerCountry: "Netherlands", lapRecordHolder: "Max Verstappen",   lapRecordTime: "1:26.103" },
+  { round: 18, name: "Bahrain GP",             circuit: "Sepang International Circuit",       country: "Malaysia",     date: "2026-10-04", racetimePST: "12:00 AM", completed: true, sprint: false, laps: 56, circuitLengthKm: 5.543, previousWinner: "Max Verstappen",    previousWinnerCountry: "Netherlands", lapRecordHolder: "Juan Pablo Montoya",lapRecordTime: "1:34.223" },
+  { round: 19, name: "Singapore GP",           circuit: "Marina Bay Street Circuit",          country: "Singapore",    date: "2026-10-11", racetimePST: "5:00 AM",  completed: false, sprint: true,  laps: 62, circuitLengthKm: 5.063, previousWinner: "George Russell",    previousWinnerCountry: "UK",          lapRecordHolder: "Lewis Hamilton",   lapRecordTime: "1:35.867" },
+  { round: 20, name: "US GP",                  circuit: "Circuit of the Americas",            country: "USA",          date: "2026-10-25", racetimePST: "1:00 PM",  completed: false, sprint: false, laps: 56, circuitLengthKm: 5.513, previousWinner: "Max Verstappen",    previousWinnerCountry: "Netherlands", lapRecordHolder: "Charles Leclerc",  lapRecordTime: "1:36.169" },
+  { round: 21, name: "Mexico City GP",         circuit: "Autodromo Hermanos Rodriguez",       country: "Mexico",       date: "2026-11-01", racetimePST: "12:00 PM", completed: false, sprint: false, laps: 71, circuitLengthKm: 4.304, previousWinner: "Lando Norris",      previousWinnerCountry: "UK",          lapRecordHolder: "Valtteri Bottas",  lapRecordTime: "1:17.774" },
+  { round: 22, name: "São Paulo GP",           circuit: "Autodromo Jose Carlos Pace",         country: "Brazil",       date: "2026-11-08", racetimePST: "9:00 AM",  completed: false, sprint: false, laps: 71, circuitLengthKm: 4.309, previousWinner: "Lando Norris",      previousWinnerCountry: "UK",          lapRecordHolder: "Valtteri Bottas",  lapRecordTime: "1:10.540" },
+  { round: 23, name: "Las Vegas GP",           circuit: "Las Vegas Strip Circuit",            country: "USA",          date: "2026-11-22", racetimePST: "8:00 PM",  completed: false, sprint: false, laps: 50, circuitLengthKm: 6.201, previousWinner: "Max Verstappen",    previousWinnerCountry: "Netherlands", lapRecordHolder: "Oscar Piastri",    lapRecordTime: "1:33.820" },
+  { round: 24, name: "Qatar GP",               circuit: "Lusail International Circuit",       country: "Qatar",        date: "2026-11-29", racetimePST: "8:00 AM",  completed: false, sprint: false, laps: 57, circuitLengthKm: 5.380, previousWinner: "Max Verstappen",    previousWinnerCountry: "Netherlands", lapRecordHolder: "Max Verstappen",   lapRecordTime: "1:24.319" },
+  { round: 25, name: "Abu Dhabi GP",           circuit: "Yas Marina Circuit",                 country: "UAE",          date: "2026-12-06", racetimePST: "5:00 AM",  completed: false, sprint: false, laps: 58, circuitLengthKm: 5.281, previousWinner: "Max Verstappen",    previousWinnerCountry: "Netherlands", lapRecordHolder: "Max Verstappen",   lapRecordTime: "1:26.103" },
 ];
 
 // ── TEAM COLORS ───────────────────────────────────────────────
