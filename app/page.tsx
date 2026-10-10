@@ -1117,6 +1117,16 @@ const CHANGELOG: Array<{
   entries: Array<{ type: "new" | "fix" | "tweak"; text: string }>;
 }> = [
   {
+    version: "v0.7",
+    date: "Oct 2026",
+    label: "Bahrain Returns",
+    entries: [
+      { type: "new",   text: "Race notes — a race can now carry a short note on its Results card. First one: who went to Monza in person" },
+      { type: "new",   text: "Bahrain GP is back — rescheduled to Sepang, Malaysia on Oct 4 and now counts toward the standings" },
+      { type: "tweak", text: "Original cancelled Bahrain round removed from the calendar, so rounds after it shifted down by one (Saudi Arabia is still cancelled)" },
+    ],
+  },
+  {
     version: "v0.6",
     date: "Jun 2026",
     label: "Progress Glow-Up",
