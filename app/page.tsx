@@ -655,6 +655,9 @@ export default function Home() {
                       <p className={`text-xl sm:text-3xl font-black ${t.textVfaint}`}>{race.round}</p>
                     </div>
                   </div>
+                  {race.note && (
+                    <div className={`px-5 py-2 text-xs italic border-b ${t.raceHeader} ${t.textMuted}`}>{race.note}</div>
+                  )}
                   <div className={`divide-y ${t.divider}`}>
                     {standings
                       .slice()
