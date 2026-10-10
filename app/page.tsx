@@ -145,6 +145,7 @@ const COUNTRY_CODES: Record<string, string> = {
   "Azerbaijan":   "az", "Singapore":    "sg", "Mexico":       "mx",
   "Brazil":       "br", "Qatar":        "qa", "UAE":          "ae",
   "Colombia":     "co", "Pirate":       "pirate", "Philippines":  "ph",
+  "Malaysia":     "my",
 };
 
 function Flag({ country, size = 16 }: { country: string; size?: number }) {
